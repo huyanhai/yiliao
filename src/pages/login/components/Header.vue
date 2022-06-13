@@ -9,10 +9,6 @@
   </header>
 </template>
 
-<script setup lang="ts">
-import LogoFullIcon from '@/assets/assets-logo-full.svg?component';
-</script>
-
 <style lang="less" scoped>
 @import '@/style/variables.less';
 .login-header {

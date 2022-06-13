@@ -8,7 +8,6 @@ import LayoutBreadcrumb from './components/Breadcrumb.vue';
 import LayoutFooter from './components/Footer.vue';
 import LayoutSideNav from './components/SideNav';
 import LayoutContent from './components/Content.vue';
-import Setting from './setting.vue';
 
 import { prefix } from '@/config/global';
 import { TRouterInfo } from '@/interface';
@@ -261,7 +260,6 @@ export default defineComponent({
             <t-layout class={this.mainLayoutCls}>{[sidebar, content]}</t-layout>
           </t-layout>
         )}
-        <Setting />
       </div>
     );
   },

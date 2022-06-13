@@ -4,12 +4,11 @@
 
     <div class="login-container">
       <div class="title-container">
-        <h1 class="title margin-no">登录到管理台</h1>
+        <h1 class="title margin-no">{{ type === 'login' ? '登录到管理台' : '找回密码' }}</h1>
       </div>
 
       <login v-if="type === 'login'" />
-      <register v-else @register-success="switchType('login')" />
-      <tdesign-setting />
+      <register v-else />
     </div>
 
     <footer class="copyright">Copyright @ 2021-2022 xxx. All Rights Reserved</footer>
@@ -21,17 +20,13 @@ export default {
 };
 </script>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useLogin } from './hooks/useLogin';
 
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
 import LoginHeader from './components/Header.vue';
-import TdesignSetting from '@/layouts/setting.vue';
 
-const type = ref('login');
-const switchType = (val: string) => {
-  type.value = val;
-};
+const { type } = useLogin();
 </script>
 
 <style lang="less" scoped>

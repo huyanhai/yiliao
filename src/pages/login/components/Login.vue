@@ -35,7 +35,7 @@
 
       <div class="check-container remember-pwd">
         <t-checkbox>记住账号</t-checkbox>
-        <span class="tip">忘记密码？</span>
+        <span class="tip" @click="switchType('register')">忘记密码？</span>
       </div>
     </template>
 
@@ -50,8 +50,10 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { MessagePlugin } from 'tdesign-vue-next';
 import { useUserStore } from '@/store';
+import { useLogin } from '../hooks/useLogin';
 
 const userStore = useUserStore();
+const { switchType } = useLogin();
 
 const INITIAL_DATA = {
   phone: '',

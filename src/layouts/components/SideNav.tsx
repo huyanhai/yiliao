@@ -3,8 +3,6 @@ import { useRouter } from 'vue-router';
 import { prefix } from '@/config/global';
 import pgk from '../../../package.json';
 import MenuContent from './MenuContent';
-import tLogo from '@/assets/assets-t-logo.svg?component';
-import tLogoFull from '@/assets/assets-logo-full.svg?component';
 import { useSettingStore } from '@/store';
 import { getActive } from '@/router';
 
@@ -53,10 +51,6 @@ const useComputed = (props) => {
 
 export default defineComponent({
   name: 'SideNav',
-  components: {
-    tLogoFull,
-    tLogo,
-  },
   props: {
     menu: {
       type: Array as PropType<string[]>,
@@ -142,11 +136,7 @@ export default defineComponent({
                   )}
                 </span>
               ),
-            operations: () => (
-              <span class="version-container">
-                {!this.collapsed && 'TDesign Starter'} {pgk.version}
-              </span>
-            ),
+            operations: () => <span class="version-container"></span>,
           }}
         >
           <MenuContent navData={this.menu} />

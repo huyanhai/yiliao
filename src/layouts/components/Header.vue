@@ -9,14 +9,14 @@
           <t-button theme="default" shape="square" variant="text" @click="changeCollapsed">
             <t-icon class="collapsed-icon" name="view-list" />
           </t-button>
-          <search :layout="layout" />
+          <!-- <search :layout="layout" /> -->
         </div>
       </template>
       <MenuContent v-show="layout !== 'side'" class="header-menu" :nav-data="menu" />
       <template #operations>
         <div class="operations-container">
           <!-- 搜索框 -->
-          <search v-if="layout !== 'side'" :layout="layout" />
+          <!-- <search v-if="layout !== 'side'" :layout="layout" /> -->
 
           <!-- 全局通知 -->
           <notice />
@@ -37,16 +37,11 @@
                 <t-icon class="header-user-avatar" name="user-circle" />
               </template>
               <div class="header-user-account">
-                Tencent
+                小明
                 <t-icon name="chevron-down" />
               </div>
             </t-button>
           </t-dropdown>
-          <!-- <t-tooltip placement="bottom" content="系统设置">
-            <t-button theme="default" shape="square" variant="text">
-              <t-icon name="setting" @click="toggleSettingPanel" />
-            </t-button>
-          </t-tooltip> -->
         </div>
       </template>
     </t-head-menu>
@@ -59,7 +54,6 @@ import { useRouter } from 'vue-router';
 import { useSettingStore } from '@/store';
 import { getActive } from '@/router';
 import { prefix } from '@/config/global';
-import LogoFull from '@/assets/assets-logo-full.svg?component';
 import { MenuRoute } from '@/interface';
 
 import Notice from './Notice.vue';
@@ -100,12 +94,6 @@ const props = defineProps({
 const router = useRouter();
 const settingStore = useSettingStore();
 
-const toggleSettingPanel = () => {
-  settingStore.updateConfig({
-    showSettingPanel: true,
-  });
-};
-
 const active = computed(() => getActive());
 
 const layoutCls = computed(() => [`${prefix}-header-layout`]);
@@ -134,14 +122,6 @@ const handleNav = (url) => {
 
 const handleLogout = () => {
   router.push(`/login?redirect=${router.currentRoute.value.fullPath}`);
-};
-
-const navToGitHub = () => {
-  window.open('https://github.com/tencent/tdesign-vue-next-starter');
-};
-
-const navToHelper = () => {
-  window.open('http://tdesign.tencent.com/starter/docs/get-started');
 };
 </script>
 <style lang="less" scoped>
