@@ -58,7 +58,7 @@ const { switchType } = useLogin();
 const INITIAL_DATA = {
   phone: '',
   account: 'admin',
-  password: 'admin',
+  password: '123456',
   verifyCode: '',
   checked: false,
 };
@@ -81,14 +81,13 @@ const onSubmit = async ({ validateResult }) => {
   if (validateResult === true) {
     try {
       await userStore.login(formData.value);
-
       MessagePlugin.success('登陆成功');
       router.push({
-        path: '/dashboard/base',
+        path: '/',
       });
     } catch (e) {
       console.log(e);
-      MessagePlugin.error(e.message);
+      MessagePlugin.error(e.data.message);
     }
   }
 };

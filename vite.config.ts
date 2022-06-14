@@ -24,7 +24,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       port: 3002,
       host: '0.0.0.0',
       proxy: {
-        '/api': 'http://127.0.0.1:3000/',
+        '/api': 'http://47.94.97.251:8080/',
       },
     },
   };
