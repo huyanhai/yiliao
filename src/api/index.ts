@@ -11,3 +11,10 @@ export function hospitalInfoList(data): any {
     params: data,
   });
 }
+
+// 科室 - 查询所有
+export function departmentInfoGet(data): any {
+  return request.get('/api/departmentInfo/gets', {
+    params: data,
+  });
+}

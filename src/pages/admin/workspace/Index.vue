@@ -1,43 +1,56 @@
 <template>
-  <t-card class="list-card-container">
-    <t-form layout="inline">
-      <t-form-item label="医疗机构名称" name="name">
-        <t-input v-model="formData.name"></t-input>
-      </t-form-item>
-      <t-form-item label="医院类型" name="name">
-        <t-select v-model="formData.type" :options="[]" placeholder="请选择医院类型" />
-      </t-form-item>
-      <t-form-item label="医院等级" name="name">
-        <t-select v-model="formData.level" :options="[]" placeholder="请选择医院等级" />
-      </t-form-item>
-      <t-form-item label="" name="name">
-        <t-button block theme="primary" variant="base">查询</t-button>
-        <t-button block variant="outline">重置</t-button>
-      </t-form-item>
-    </t-form>
-    <t-table
-      row-key="index"
-      :data="[
-        { index: 1, platform: '公用' },
-        { index: 2, platform: '私有' },
-      ]"
-      :loading="loading"
-      :columns="columns"
-      :pagination="pagination"
-      :table-content-width="'undefined'"
-      :fixed-rows="[2, 2]"
-      @page-change="onPageChange"
-    >
-      <template #operation="{ row }">
-        <t-button theme="primary" @click="$router.push(`/workspace/details/${row.index}`)"> 查看详情 </t-button>
-      </template>
-    </t-table>
-  </t-card>
+  <a-card style="margin-bottom: 20px" class="my-card">
+    <a-form layout="inline">
+      <a-form-item label="医疗机构名称">
+        <a-input v-model:value="formData.name" placeholder="input placeholder" style="width: 200px" />
+      </a-form-item>
+      <a-form-item label="医院类型">
+        <a-select v-model="formData.type" style="width: 200px">
+          <a-select-option value="jack">Jack</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="医院等级">
+        <a-select v-model="formData.level" style="width: 200px">
+          <a-select-option value="jack">Jack</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="">
+        <a-space>
+          <a-button type="primary" @click="showDialog = true">新增</a-button>
+          <a-button type="primary">查询</a-button>
+          <a-button>重置</a-button>
+        </a-space>
+      </a-form-item>
+    </a-form>
+  </a-card>
+  <a-card>
+    <a-table :data-source="[1]" :pagination="pagination" @change="onPageChange">
+      <a-table-column key="name" title="医院名称" data-index="lastName" />
+      <a-table-column key="name" title="医院头像" data-index="lastName" />
+      <a-table-column key="name" title="上级医院" data-index="lastName" />
+      <a-table-column key="name" title="医院地址" data-index="lastName" />
+      <a-table-column key="name" title="医院类型" data-index="lastName" />
+      <a-table-column key="name" title="医院等级" data-index="lastName" />
+      <a-table-column key="name" title="是否上架" data-index="lastName" />
+      <a-table-column key="name" title="操作" data-index="lastName">
+        <template #default="{ record }">
+          <a-space>
+            <a-button type="link" size="small">查看详情</a-button>
+            <a-button type="primary" size="small" @click="select(record)">编辑</a-button>
+            <a-button type="primary" size="small" danger>删除</a-button>
+          </a-space>
+        </template>
+      </a-table-column>
+    </a-table>
+  </a-card>
+  <work-dialog />
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { hospitalInfoList } from '@/api';
-import { columns } from './table';
+import { useWorkspace } from './hooks/useWorkspace';
+
+import WorkDialog from './components/Dialog.vue';
 
 const loading = ref(false);
 
@@ -53,6 +66,8 @@ const pagination = {
   total: 100,
 };
 
+const { select, showDialog } = useWorkspace();
+
 const getList = async () => {
   hospitalInfoList({ pageIndex: pagination.defaultCurrent, pageSize: pagination.defaultPageSize });
 };
@@ -66,4 +81,10 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.my-card {
+  :deep(.ant-form-item) {
+    margin-bottom: 12px;
+  }
+}
+</style>

@@ -11,6 +11,7 @@
     "stylelint:fix": "stylelint --fix src/**/*.{html,vue,vss,sass,less}"
   },
   "dependencies": {
+    "ant-design-vue": "^3.2.7",
     "axios": "^0.27.2",
     "dayjs": "^1.10.6",
     "echarts": "~5.1.2",

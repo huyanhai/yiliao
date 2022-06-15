@@ -38,7 +38,7 @@ export const columns = ref([
     title: '是否上架',
   },
   {
-    width: 150,
+    width: 220,
     title: '操作',
     cell: 'operation',
     fixed: 'right',

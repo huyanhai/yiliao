@@ -1,0 +1,1 @@
+http://47.94.97.251:8080/swagger-ui/index.html
