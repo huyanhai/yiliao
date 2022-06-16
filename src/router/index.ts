@@ -1,4 +1,4 @@
-import { useRoute, createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { useRoute, createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 
 import admin from './modules/admin';
 
@@ -13,10 +13,13 @@ const defaultRouterList: Array<RouteRecordRaw> = [
     path: '/login',
     name: 'login',
     component: () => import('@/pages/login/index.vue'),
+    meta: {
+      hidden: true,
+    },
   },
   {
     path: '/',
-    redirect: '/workspace/index',
+    redirect: '/workspace/base',
     component: () => import('@/layouts/blank.vue'),
   },
   {
@@ -29,7 +32,7 @@ const defaultRouterList: Array<RouteRecordRaw> = [
   },
 ];
 
-export const allRoutes = [...defaultRouterList, ...admin];
+export const allRoutes = [...defaultRouterList, ...asyncRouterList];
 
 export const getActive = (maxLevel = 3): string => {
   const route = useRoute();
@@ -44,7 +47,7 @@ export const getActive = (maxLevel = 3): string => {
 };
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: allRoutes,
   scrollBehavior() {
     return {

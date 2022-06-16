@@ -35,6 +35,7 @@ export const usePermissionStore = defineStore('permission', {
       let accessedRouters = [];
 
       let removeRoutes = [];
+
       // special token
       if (roles.includes('all')) {
         accessedRouters = asyncRouterList;
@@ -46,8 +47,6 @@ export const usePermissionStore = defineStore('permission', {
 
       this.routers = accessedRouters;
       this.removeRoutes = removeRoutes;
-
-      console.log('accessedRouters', accessedRouters);
 
       removeRoutes.forEach((item: RouteRecordRaw) => {
         if (router.hasRoute(item.name)) {

@@ -19,16 +19,21 @@
           <!-- <search v-if="layout !== 'side'" :layout="layout" /> -->
 
           <!-- 全局通知 -->
-          <notice />
-
+          <!-- <notice /> -->
           <t-dropdown :min-column-width="135" trigger="click">
             <template #dropdown>
               <t-dropdown-menu>
-                <t-dropdown-item class="operations-dropdown-container-item" @click="handleNav('/user/index')">
-                  <t-icon name="user-circle"></t-icon>个人中心
+                <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
+                  账号资料
                 </t-dropdown-item>
                 <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
-                  <t-icon name="poweroff"></t-icon>退出登录
+                  修改密码
+                </t-dropdown-item>
+                <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
+                  消息通知
+                </t-dropdown-item>
+                <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
+                  退出登录
                 </t-dropdown-item>
               </t-dropdown-menu>
             </template>
@@ -37,7 +42,7 @@
                 <t-icon class="header-user-avatar" name="user-circle" />
               </template>
               <div class="header-user-account">
-                小明
+                {{ (userInfo as any).userName }}
                 <t-icon name="chevron-down" />
               </div>
             </t-button>
@@ -51,13 +56,14 @@
 <script setup lang="ts">
 import { PropType, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useSettingStore } from '@/store';
+import { useSettingStore, useUserStore } from '@/store';
 import { getActive } from '@/router';
 import { prefix } from '@/config/global';
+import LogoFull from '@/assets/assets-logo-full.svg?component';
 import { MenuRoute } from '@/interface';
 
-import Notice from './Notice.vue';
-import Search from './Search.vue';
+// import Notice from './Notice.vue';
+// import Search from './Search.vue';
 import MenuContent from './MenuContent';
 
 const props = defineProps({
@@ -93,6 +99,15 @@ const props = defineProps({
 
 const router = useRouter();
 const settingStore = useSettingStore();
+const userStore = useUserStore();
+
+const userInfo = computed(() => userStore.userInfo);
+
+// const toggleSettingPanel = () => {
+//   settingStore.updateConfig({
+//     showSettingPanel: true,
+//   });
+// };
 
 const active = computed(() => getActive());
 

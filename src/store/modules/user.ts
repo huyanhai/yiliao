@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { TOKEN_NAME } from '@/config/global';
 import { store } from '@/store';
-import { login } from '@/api';
+import { login, getUserDetailByLogins } from '@/api';
 
 const InitUserInfo = {
   roles: [],
@@ -9,12 +9,15 @@ const InitUserInfo = {
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    token: localStorage.getItem(TOKEN_NAME), // 默认token不走权限
+    token: localStorage.getItem(TOKEN_NAME) || 'main_token', // 默认token不走权限
     userInfo: InitUserInfo,
   }),
   getters: {
     roles: (state) => {
       return state.userInfo?.roles;
+    },
+    info: (state) => {
+      return state.userInfo;
     },
   },
   actions: {
@@ -31,10 +34,10 @@ export const useUserStore = defineStore('user', {
       }
     },
     async getUserInfo() {
-      this.userInfo = {
-        name: 'td_main',
-        roles: ['all'],
-      };
+      const res = await getUserDetailByLogins();
+      res.data.roles = ['all'];
+      res.data.name = 'name';
+      this.userInfo = res.data;
     },
     async logout() {
       localStorage.removeItem(TOKEN_NAME);

@@ -1,4 +1,4 @@
-import { defineComponent, computed, nextTick, onMounted, watch } from 'vue';
+import { defineComponent, computed, nextTick, onMounted, watch, onBeforeUnmount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoute, useRouter } from 'vue-router';
 import { usePermissionStore, useSettingStore, useTabsRouterStore } from '@/store';
@@ -8,6 +8,7 @@ import LayoutBreadcrumb from './components/Breadcrumb.vue';
 import LayoutFooter from './components/Footer.vue';
 import LayoutSideNav from './components/SideNav';
 import LayoutContent from './components/Content.vue';
+import Setting from './setting.vue';
 
 import { prefix } from '@/config/global';
 import { TRouterInfo } from '@/interface';
@@ -68,8 +69,26 @@ export default defineComponent({
       tabsRouterStore.appendTabRouterList({ path, title: title as string, name, isAlive: true });
     };
 
+    const getTabRouterListCache = () => {
+      tabsRouterStore.initTabRouterList(JSON.parse(localStorage.getItem('tabRouterList')));
+    };
+    const setTabRouterListCache = () => {
+      const { tabRouters } = tabsRouterStore;
+      localStorage.setItem('tabRouterList', JSON.stringify(tabRouters));
+    };
+
     onMounted(() => {
       appendNewRoute();
+    });
+
+    // 如果不需要持久化标签页可以注释掉以下的 onMounted 和 onBeforeUnmount 的内容
+    onMounted(() => {
+      // if (localStorage.getItem('tabRouterList')) getTabRouterListCache();
+      // window.addEventListener('beforeunload', setTabRouterListCache);
+    });
+
+    onBeforeUnmount(() => {
+      // window.removeEventListener('beforeunload', setTabRouterListCache);
     });
 
     watch(
@@ -148,8 +167,8 @@ export default defineComponent({
     };
 
     const renderContent = () => {
-      const { showFooter, isUseTabsRouter } = settingStore;
-      const { tabRouters } = tabsRouterStore;
+      const { showBreadcrumb, showFooter, isUseTabsRouter } = settingStore;
+      const tabRouters = tabsRouterStore.tabRouters.filter((route) => route.isAlive || route.isHome);
       return (
         // <t-layout class={[`${prefix}-layout`]} key={route.name}> 如果存在多个滚动列表之间切换时，页面不刷新导致的样式问题 请设置key 但会导致多标签tab页的缓存失效
         <t-layout class={[`${prefix}-layout`]}>
@@ -208,7 +227,7 @@ export default defineComponent({
             </t-tabs>
           )}
           <t-content class={`${prefix}-content-layout`}>
-            {<LayoutBreadcrumb />}
+            {showBreadcrumb && <LayoutBreadcrumb />}
             <LayoutContent />
           </t-content>
           {showFooter && renderFooter()}
@@ -229,7 +248,6 @@ export default defineComponent({
     const header = this.renderHeader();
     const sidebar = this.renderSidebar();
     const content = this.renderContent();
-
     return (
       <div>
         {layout === 'side' ? (
@@ -243,6 +261,7 @@ export default defineComponent({
             <t-layout class={this.mainLayoutCls}>{[sidebar, content]}</t-layout>
           </t-layout>
         )}
+        <Setting />
       </div>
     );
   },

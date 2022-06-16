@@ -1,7 +1,6 @@
 <template>
   <t-breadcrumb :max-item-width="'150'" class="tdesign-breadcrumb">
-    <t-breadcrumbItem href="/"> 首页 </t-breadcrumbItem>
-    <t-breadcrumbItem v-for="(item, index) in crumbs" :key="item.to" :href="index === crumbs.length - 1 ? '' : item.to">
+    <t-breadcrumbItem v-for="item in crumbs" :key="item.to" :to="item.to">
       {{ item.title }}
     </t-breadcrumbItem>
   </t-breadcrumb>
@@ -16,14 +15,13 @@ const crumbs = computed(() => {
 
   const pathArray = route.path.split('/');
   pathArray.shift();
+
   const breadcrumbs = pathArray.reduce((breadcrumbArray, path, idx) => {
-    if ([0, 1].includes(idx) && !((route.matched[idx] || {}).meta || {}).hidden) {
-      breadcrumbArray.push({
-        path,
-        to: breadcrumbArray[idx - 1] ? `/${breadcrumbArray[idx - 1].path}/${path}` : `/${path}`,
-        title: ((route.matched[idx] || {}).meta || {}).title || path,
-      });
-    }
+    breadcrumbArray.push({
+      path,
+      to: breadcrumbArray[idx - 1] ? `/${breadcrumbArray[idx - 1].path}/${path}` : `/${path}`,
+      title: route.matched[idx].meta.title || path,
+    });
     return breadcrumbArray;
   }, []);
   return breadcrumbs;

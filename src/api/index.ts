@@ -1,5 +1,7 @@
 import request from '@/utils/request';
 
+export * from './base';
+
 export function login(data): any {
   return request.post('/api/user/login', data, {
     params: data,

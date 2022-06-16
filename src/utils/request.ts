@@ -27,7 +27,6 @@ instance.interceptors.request.use((config) => {
     },
     params: {
       ...config.params,
-      token: user.token,
       _t: Date.now(),
     },
   };
