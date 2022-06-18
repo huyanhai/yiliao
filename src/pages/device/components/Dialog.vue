@@ -2,10 +2,10 @@
   <a-modal v-model:visible="showDialog" title="设备管理" width="600px" @ok="confirm">
     <a-form :model="item" :label-col="{ span: 4 }">
       <a-form-item label="设备编号" name="username" :rules="rules.name">
-        <a-input v-model:value="item" />
+        <a-input v-model:value="item.code" />
       </a-form-item>
       <a-form-item label="设备名称" name="username" :rules="rules.name">
-        <a-input v-model:value="item" />
+        <a-input v-model:value="item.name" />
       </a-form-item>
       <a-form-item label="医疗机构名称" name="username" :rules="rules.name">
         <a-select v-model="item">
@@ -13,22 +13,19 @@
         </a-select>
       </a-form-item>
       <a-form-item label="设备MAC" name="username" :rules="rules.name">
-        <a-input v-model:value="item" />
+        <a-input v-model:value="item.mac" />
       </a-form-item>
       <a-form-item label="productKey" name="username" :rules="rules.name">
-        <a-input v-model:value="item" />
-      </a-form-item>
-      <a-form-item label="deviceName" name="username" :rules="rules.name">
-        <a-input v-model:value="item" />
+        <a-input v-model:value="item.productKey" />
       </a-form-item>
       <a-form-item label="deviceSecret" name="username" :rules="rules.name">
-        <a-input v-model:value="item" />
+        <a-input v-model:value="item.deviceSecret" />
       </a-form-item>
       <a-form-item label="设备类型" name="username" :rules="rules.name">
-        <a-input v-model:value="item" />
+        <a-input v-model:value="item.deviceType" />
       </a-form-item>
       <a-form-item label="设备状态" name="username" :rules="rules.name">
-        <a-radio-group v-model:value="item" name="radioGroup">
+        <a-radio-group v-model:value="item.status" name="radioGroup">
           <a-radio value="1">启用</a-radio>
           <a-radio value="2">禁用</a-radio>
           <a-radio value="3">报损</a-radio>

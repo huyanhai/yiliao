@@ -20,3 +20,13 @@ export function departmentInfoGet(data): any {
     params: data,
   });
 }
+
+/**
+ * 设备管理
+ */
+// 列表-分页
+export function deviceInfoGetPage(data): any {
+  return request.get('/api/deviceInfo/getByPage', {
+    params: data,
+  });
+}

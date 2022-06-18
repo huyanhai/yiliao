@@ -23,13 +23,13 @@
           <t-dropdown :min-column-width="135" trigger="click">
             <template #dropdown>
               <t-dropdown-menu>
-                <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
+                <t-dropdown-item class="operations-dropdown-container-item" @click="$router.push('/user/edit')">
                   账号资料
                 </t-dropdown-item>
-                <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
+                <t-dropdown-item class="operations-dropdown-container-item" @click="$router.push('/user/password')">
                   修改密码
                 </t-dropdown-item>
-                <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
+                <t-dropdown-item class="operations-dropdown-container-item" @click="$router.push('/user/message')">
                   消息通知
                 </t-dropdown-item>
                 <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">

@@ -134,4 +134,31 @@ export default [
       },
     ],
   },
+  {
+    path: '/user',
+    component: Layout,
+    name: 'user',
+    redirect: '/user/edit',
+    meta: { title: '个人信息', icon: DashboardIcon, single: true, hidden: true },
+    children: [
+      {
+        path: 'edit',
+        name: 'UserEdit',
+        component: () => import('@/pages/user/Edit.vue'),
+        meta: { title: '账号资料' },
+      },
+      {
+        path: 'password',
+        name: 'UserPassword',
+        component: () => import('@/pages/user/Password.vue'),
+        meta: { title: '修改密码' },
+      },
+      {
+        path: 'message',
+        name: 'UserMessage',
+        component: () => import('@/pages/user/Message.vue'),
+        meta: { title: '消息通知' },
+      },
+    ],
+  },
 ];

@@ -24,7 +24,7 @@
       </a-form>
     </a-card>
 
-    <my-table :data-source="[1]" :pagination="pagination" @change="onPageChange">
+    <my-table :loading="loading" :data-source="dataSource" :pagination="pagination" @change="onPageChange">
       <template #left>设备管理</template>
       <template #right>
         <a-button type="primary" @click="showDialog = true">新增</a-button>
@@ -49,32 +49,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { hospitalInfoList } from '@/api';
+import { onMounted } from 'vue';
 import { usePatient } from './hooks/usePatient';
 
 import MyTable from '@/components/table.vue';
 import MyDialog from './components/Dialog.vue';
 
-const loading = ref(false);
+const { edit, getList, dataSource, loading, showDialog, formData, pagination } = usePatient();
 
-const formData = ref({
-  name: '',
-  type: '',
-  level: '',
-});
-
-const pagination = {
-  defaultCurrent: 1,
-  defaultPageSize: 10,
-  total: 100,
-};
-
-const { edit, showDialog } = usePatient();
-
-const getList = async () => {
-  hospitalInfoList({ pageIndex: pagination.defaultCurrent, pageSize: pagination.defaultPageSize });
-};
+// const getList = async () => {
+//   hospitalInfoList({ pageIndex: pagination.defaultCurrent, pageSize: pagination.defaultPageSize });
+// };
 
 const onPageChange = (pageInfo: any) => {
   console.log('onPageChange', pageInfo);
