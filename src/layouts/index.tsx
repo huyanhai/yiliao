@@ -83,12 +83,12 @@ export default defineComponent({
 
     // 如果不需要持久化标签页可以注释掉以下的 onMounted 和 onBeforeUnmount 的内容
     onMounted(() => {
-      if (localStorage.getItem('tabRouterList')) getTabRouterListCache();
-      window.addEventListener('beforeunload', setTabRouterListCache);
+      // if (localStorage.getItem('tabRouterList')) getTabRouterListCache();
+      // window.addEventListener('beforeunload', setTabRouterListCache);
     });
 
     onBeforeUnmount(() => {
-      window.removeEventListener('beforeunload', setTabRouterListCache);
+      // window.removeEventListener('beforeunload', setTabRouterListCache);
     });
 
     watch(
