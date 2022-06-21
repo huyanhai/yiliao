@@ -14,8 +14,8 @@ import 'ant-design-vue/dist/antd.css';
 
 const app = createApp(App);
 
-app.use(TDesign);
 app.use(Antd);
+app.use(TDesign);
 app.use(store);
 app.use(router);
 

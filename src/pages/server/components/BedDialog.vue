@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model:visible="showDialog" title="床位管理" width="600px" @ok="confirm">
+  <a-modal v-model:visible="showDialog" title="床位管理" width="600px" :closable="false">
     <a-form :model="item" :label-col="{ span: 4 }">
       <a-form-item label="床位号" name="username" :rules="rules.name">
         <a-input v-model:value="item" />

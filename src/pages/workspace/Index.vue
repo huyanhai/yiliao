@@ -6,29 +6,54 @@
           <a-input v-model:value="formData.name" style="width: 200px" />
         </a-form-item>
         <a-form-item label="医院类型">
-          <a-select v-model="formData.type" style="width: 200px">
-            <a-select-option value="jack">Jack</a-select-option>
-          </a-select>
+          <a-select
+            v-model:value="formData.type"
+            style="width: 200px"
+            :field-names="{
+              label: 'codeName',
+              value: 'codeValue',
+              options: 'options',
+            }"
+            :options="hospitalType"
+          />
         </a-form-item>
         <a-form-item label="医院等级">
-          <a-select v-model="formData.level" style="width: 200px">
-            <a-select-option value="jack">Jack</a-select-option>
-          </a-select>
+          <a-select
+            v-model:value="formData.level"
+            style="width: 200px"
+            :field-names="{
+              label: 'codeName',
+              value: 'codeValue',
+              options: 'options',
+            }"
+            :options="hospitalLevel"
+          />
         </a-form-item>
         <a-form-item label="">
           <a-space>
-            <a-button type="primary">查询</a-button>
-            <a-button>重置</a-button>
+            <a-button
+              type="primary"
+              @click="
+                pagination.defaultCurrent = 1;
+                getList();
+              "
+              >查询</a-button
+            >
+            <a-button
+              @click="
+                reset();
+                getList();
+              "
+              >重置</a-button
+            >
           </a-space>
         </a-form-item>
       </a-form>
     </a-card>
-    {{ list }}
     <my-table :data-source="list" :pagination="pagination" :loading="loading" @change="onPageChange">
       <template #left>工作站管理</template>
       <template #right>
         <a-button type="primary" @click="showDialog = true">新增</a-button>
-        <!-- <a-button type="primary">导入</a-button> -->
       </template>
       <a-table-column title="医院名称" data-index="name" />
       <a-table-column title="医院头像" data-index="logoFileId" />
@@ -40,7 +65,7 @@
       <a-table-column title="操作">
         <template #default="{ record }">
           <a-space>
-            <a-button type="link" size="small" @click="$router.push('/workspace/details?id=1')">查看详情</a-button>
+            <a-button type="link" size="small" @click="checkDetails(record)">查看详情</a-button>
             <a-button type="primary" size="small" @click="select(record)">编辑</a-button>
             <a-button type="primary" size="small" danger @click="del(record)">删除</a-button>
           </a-space>
@@ -48,10 +73,11 @@
       </a-table-column>
     </my-table>
     <work-dialog />
+    <work-details />
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { Modal } from 'ant-design-vue';
 
 import { useDictStore } from '@/store';
@@ -62,19 +88,21 @@ import { useWorkspace } from './hooks/useWorkspace';
 import MyTable from '@/components/table.vue';
 
 import WorkDialog from './components/Dialog.vue';
+import WorkDetails from './components/Details.vue';
 
-const { dict, getDict, getRegion, getHospital } = useDictStore();
+const { getDict, getRegion, getHospital } = useDictStore();
+const dictStore = useDictStore();
 
-const formData = ref({
-  name: '',
-  type: '',
-  level: '',
-});
+const dict = computed(() => dictStore.dict);
+const hospitalType = computed(() => dict.value.filter((item) => item.code === 'hospital_type'));
+const hospitalLevel = computed(() => dict.value.filter((item) => item.code === 'hospital_level'));
 
-const { select, getList, list, showDialog, pagination, loading } = useWorkspace();
+const { select, getList, reset, checkDetails, list, showDialog, pagination, loading, formData } = useWorkspace();
 
 const onPageChange = (pageInfo: any) => {
-  console.log('onPageChange', pageInfo);
+  pagination.value.defaultCurrent = pageInfo.current;
+  pagination.value.defaultPageSize = pageInfo.pageSize;
+  getList();
 };
 
 const del = (item: any) => {
@@ -86,7 +114,7 @@ const del = (item: any) => {
     onOk: async () => {
       const { success } = await hospitalInfoDelete({ id: item.id });
       if (success) {
-        console.log('删除成功');
+        getList();
       }
     },
   });
@@ -96,7 +124,7 @@ onMounted(async () => {
   getList();
   await getRegion();
   await getHospital();
-  if (Object.keys(dict || {}).length === 0) {
+  if (Object.keys(dict.value || {}).length === 0) {
     getDict();
   }
 });

@@ -1,38 +1,46 @@
 <template>
-  <a-modal v-model:visible="showDialog" title="添加医生" width="600px" @ok="confirm">
-    <a-form :model="item" :label-col="{ span: 4 }">
-      <a-form-item label="一级分类" name="username" :rules="rules.name">
-        <a-input v-model:value="item" />
+  <a-modal v-model:visible="showDialog" title="添加医生" width="600px" :closable="false">
+    <a-form :model="form" :label-col="{ span: 4 }">
+      <a-form-item label="一级分类" name="username">
+        <a-input v-model:value="form.name" />
+      </a-form-item>
+      <a-form-item label="描述" name="username">
+        <a-textarea v-model:value="form.introduction" />
       </a-form-item>
     </a-form>
     <template #footer>
       <a-space>
-        <a-button type="primary">提交</a-button>
-        <a-button>返回</a-button>
+        <a-button type="primary" @click="confirm">提交</a-button>
+        <a-button @click="reset">返回</a-button>
       </a-space>
     </template>
   </a-modal>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
+
 import { useServer } from '../hooks/useServer';
-import { departmentInfoGet } from '@/api';
+import { departmentInfoInsert } from '@/api';
 
-const { showDialog, item } = useServer();
+const { showDialog, getList } = useServer();
 
-const addressOptions = ref([]);
-
-const rules = {
-  name: [{ required: true, message: 'Please input your username!' }],
-};
-
-const confirm = () => {
-  console.log('confirm');
-};
-
-onMounted(() => {
-  departmentInfoGet({});
+const form = ref({
+  name: '',
+  introduction: '',
 });
+
+const reset = () => {
+  form.value.name = '';
+  showDialog.value = false;
+};
+
+const confirm = async () => {
+  const { success } = await departmentInfoInsert(form.value);
+  if (success) {
+    reset();
+    getList();
+  }
+};
 </script>
 
 <style lang="scss" scoped></style>

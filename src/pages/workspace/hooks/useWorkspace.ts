@@ -6,7 +6,11 @@ const list = ref([]);
 const loading = ref(false);
 
 const showDialog = ref(false);
-const activeItem = ref({
+const showDetails = ref(false);
+
+const activeItem = ref<{
+  [key: string]: any;
+}>({
   address: '',
   cityId: null,
   districtId: null,
@@ -28,7 +32,25 @@ const pagination = ref({
   total: 0,
 });
 
+const formData = ref({
+  name: '',
+  type: '',
+  level: '',
+});
+
+const checkDetails = (item: any) => {
+  showDetails.value = true;
+  activeItem.value = Object.assign(
+    activeItem.value,
+    {
+      addressArr: [item.provinceId || '', item.cityId || '', item.districtId || ''].filter((item) => item),
+    },
+    item,
+  );
+};
+
 const reset = () => {
+  formData.value = { name: '', type: '', level: '' };
   activeItem.value = {
     address: '',
     cityId: null,
@@ -69,6 +91,7 @@ const getList = async () => {
   const { data = [], success } = await hospitalInfoList({
     pageIndex: pagination.value.defaultCurrent,
     pageSize: pagination.value.defaultPageSize,
+    ...formData.value,
   }).finally(() => {
     loading.value = false;
   });
@@ -76,7 +99,7 @@ const getList = async () => {
   if (success) {
     list.value = data.records;
     pagination.value.total = data.total;
-    pagination.value.defaultCurrent = data.pages;
+    pagination.value.defaultCurrent = data.current;
     pagination.value.defaultPageSize = data.size;
   }
 };
@@ -88,9 +111,12 @@ export const useWorkspace = () => {
     activeItem,
     pagination,
     loading,
+    formData,
+    showDetails,
 
     select,
     getList,
     reset,
+    checkDetails,
   };
 };

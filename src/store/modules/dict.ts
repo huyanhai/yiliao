@@ -29,12 +29,11 @@ export const useDictStore = defineStore('dict', {
       }
     },
     async getHospital() {
-      if (this.hospitalInfo.length === 0) {
-        const { data = [], success } = await hospitalInfoGets();
-        if (success) {
-          this.hospitalInfo = data;
-          localStorage.setItem('hospitalInfo', JSON.stringify(this.hospitalInfo));
-        }
+      const { data = [], success } = await hospitalInfoGets();
+      if (success) {
+        const datas = getTree(data, '', []);
+        this.hospitalInfo = datas;
+        localStorage.setItem('hospitalInfo', JSON.stringify(this.hospitalInfo));
       }
     },
   },

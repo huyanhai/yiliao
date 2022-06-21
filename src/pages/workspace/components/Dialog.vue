@@ -1,9 +1,18 @@
 <template>
-  <a-modal v-model:visible="showDialog" title="添加医院" width="1000px" :label-col="{ span: 4 }">
-    {{ activeItem }}
+  <a-modal v-model:visible="showDialog" title="添加医院" width="1000px" :label-col="{ span: 4 }" :closable="false">
     <a-form :model="activeItem">
       <a-form-item label="父级医院">
-        <a-select v-model="activeItem.parentId"></a-select>
+        <a-tree-select
+          v-model:value="activeItem.parentId"
+          style="width: 100%"
+          :tree-data="hospitalInfo"
+          allow-clear
+          checkable
+          :field-names="{
+            label: 'name',
+            value: 'id',
+          }"
+        />
       </a-form-item>
       <a-form-item label="医院名称" name="name" :rules="rules.name">
         <a-input v-model:value="activeItem.name" />
@@ -104,7 +113,7 @@
 import { onMounted, computed, ref } from 'vue';
 import MoreCheck from '@/components/MoreCheck.vue';
 import { useWorkspace } from '../hooks/useWorkspace';
-import { departmentInfoGet, hospitalInfoInsert, uploadImg } from '@/api';
+import { departmentInfoGet, hospitalInfoInsert, uploadImg, hospitalInfoUpdate } from '@/api';
 import { useDictStore } from '@/store';
 
 const { showDialog, activeItem, reset, getList } = useWorkspace();
@@ -113,7 +122,9 @@ const dictStore = useDictStore();
 const logoFileId = ref([]);
 
 const region = computed(() => dictStore.region);
-const hospitalInfo = computed(() => dictStore.hospitalInfo);
+const hospitalInfo = computed(() => {
+  return dictStore.hospitalInfo;
+});
 const dict = computed(() => dictStore.dict);
 
 const hospitalType = computed(() => dict.value.filter((item) => item.code === 'hospital_type'));
@@ -131,7 +142,9 @@ const rules = {
 };
 
 const confirm = async () => {
-  const { success } = await hospitalInfoInsert(activeItem.value);
+  const fn = activeItem.value?.id ? hospitalInfoUpdate : hospitalInfoInsert;
+
+  const { success } = await fn(activeItem.value);
   if (success) {
     showDialog.value = false;
     reset();
