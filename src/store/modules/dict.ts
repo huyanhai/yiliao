@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { store } from '@/store';
-import { sysDictionary, regionCodes, hospitalInfoGets } from '@/api';
+import { sysDictionary, regionCodes, hospitalInfoGets, getAllByHospitalId } from '@/api';
 import { getTree } from '@/utils/tools';
 
 export const useDictStore = defineStore('dict', {
@@ -8,6 +8,7 @@ export const useDictStore = defineStore('dict', {
     dict: JSON.parse(localStorage.getItem('dict')) || [],
     region: JSON.parse(localStorage.getItem('region')) || [],
     hospitalInfo: JSON.parse(localStorage.getItem('hospitalInfo')) || [],
+    allHospital: JSON.parse(localStorage.getItem('allHospital')) || [],
   }),
   actions: {
     async getDict() {
@@ -34,6 +35,16 @@ export const useDictStore = defineStore('dict', {
         const datas = getTree(data, '', []);
         this.hospitalInfo = datas;
         localStorage.setItem('hospitalInfo', JSON.stringify(this.hospitalInfo));
+      }
+    },
+    async allByHospitalId(id?: string | number) {
+      const { data = [], success } = await getAllByHospitalId({
+        hospitalId: id,
+      });
+      if (success) {
+        const datas = getTree(data, '00000000-0000-0000-0000-000000000000', []);
+        this.allHospital = datas;
+        localStorage.setItem('allHospital', JSON.stringify(this.allHospital));
       }
     },
   },

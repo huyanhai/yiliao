@@ -1,5 +1,6 @@
 <template>
   <a-modal v-model:visible="showDialog" title="添加医院" width="1000px" :label-col="{ span: 4 }" :closable="false">
+    {{ activeItem }}
     <a-form :model="activeItem">
       <a-form-item label="父级医院">
         <a-tree-select
@@ -70,7 +71,17 @@
         />
       </a-form-item>
       <a-form-item label="医院科室" name="username" :rules="rules.name">
-        <a-form-item-rest>
+        <a-tree
+          v-model:selectedKeys="activeItem.departmentIds"
+          v-model:checkedKeys="activeItem.departmentIds"
+          checkable
+          :tree-data="allHospital"
+          :field-names="{
+            title: 'name',
+            key: 'id',
+          }"
+        />
+        <!-- <a-form-item-rest>
           <a-row :gutter="16">
             <a-col :span="12">
               一级科室
@@ -95,7 +106,7 @@
               />
             </a-col>
           </a-row>
-        </a-form-item-rest>
+        </a-form-item-rest> -->
       </a-form-item>
       <a-form-item label="医院简介" name="introduction" :rules="rules.introduction">
         <a-textarea v-model:value="activeItem.introduction" placeholder="请填写医院简介" />
@@ -129,6 +140,7 @@ const dict = computed(() => dictStore.dict);
 
 const hospitalType = computed(() => dict.value.filter((item) => item.code === 'hospital_type'));
 const hospitalLevel = computed(() => dict.value.filter((item) => item.code === 'hospital_level'));
+const allHospital = computed(() => dictStore.allHospital);
 
 const rules = {
   // parentId: [{ required: true, message: '请选择父级医院' }],

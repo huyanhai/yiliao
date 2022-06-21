@@ -66,7 +66,16 @@
         <template #default="{ record }">
           <a-space>
             <a-button type="link" size="small" @click="checkDetails(record)">查看详情</a-button>
-            <a-button type="primary" size="small" @click="select(record)">编辑</a-button>
+            <a-button
+              type="primary"
+              size="small"
+              @click="
+                select(record);
+                allByHospitalId(record.id);
+              "
+            >
+              编辑
+            </a-button>
             <a-button type="primary" size="small" danger @click="del(record)">删除</a-button>
           </a-space>
         </template>
@@ -90,7 +99,7 @@ import MyTable from '@/components/table.vue';
 import WorkDialog from './components/Dialog.vue';
 import WorkDetails from './components/Details.vue';
 
-const { getDict, getRegion, getHospital } = useDictStore();
+const { getDict, getRegion, getHospital, allByHospitalId } = useDictStore();
 const dictStore = useDictStore();
 
 const dict = computed(() => dictStore.dict);
@@ -124,6 +133,7 @@ onMounted(async () => {
   getList();
   await getRegion();
   await getHospital();
+  await allByHospitalId();
   if (Object.keys(dict.value || {}).length === 0) {
     getDict();
   }

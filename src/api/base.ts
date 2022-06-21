@@ -25,3 +25,10 @@ export function hospitalInfoGets(data?: any): any {
 export function uploadImg(data?: any): any {
   return request.post('/api/file/upload', data);
 }
+
+// 查询所有科室，根据医院选中, hospitalId 可为空
+export function getAllByHospitalId(data?: any): any {
+  return request.get('/api/departmentInfo/getAllByHospitalId', {
+    params: data,
+  });
+}
