@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { hospitalInfoList } from '@/api';
+import { hospitalInfoList, hospitalInfoById } from '@/api';
 
 const list = ref([]);
 
@@ -40,6 +40,7 @@ const formData = ref({
 
 const checkDetails = (item: any) => {
   showDetails.value = true;
+
   activeItem.value = Object.assign(
     activeItem.value,
     {
@@ -74,16 +75,19 @@ const reset = () => {
 };
 
 const select = (item: any) => {
-  item.hospitalLevel = `${item.hospitalLevel}`;
-  item.hospitalType = `${item.hospitalType}`;
-  activeItem.value = Object.assign(
-    activeItem.value,
-    {
-      addressArr: [item.provinceId || '', item.cityId || '', item.districtId || ''].filter((item) => item),
-    },
-    item,
-  );
-  showDialog.value = !showDialog.value;
+  // item.hospitalLevel = `${item.hospitalLevel}`;
+  // item.hospitalType = `${item.hospitalType}`;
+  // activeItem.value = Object.assign(
+  //   activeItem.value,
+  //   {
+  //     addressArr: [item.provinceId || '', item.cityId || '', item.districtId || ''].filter((item) => item),
+  //   },
+  //   item,
+  // );
+  hospitalInfoById({
+    id: item.id,
+  });
+  // showDialog.value = !showDialog.value;
 };
 
 const getList = async () => {

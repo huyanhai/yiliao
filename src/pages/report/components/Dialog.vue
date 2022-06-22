@@ -14,13 +14,11 @@
   </a-modal>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { usePatient } from '../hooks/usePatient';
+import { onMounted } from 'vue';
+import { useReport } from '../hooks/useReport';
 import { departmentInfoGet } from '@/api';
 
-const { showDialog, item } = usePatient();
-
-const addressOptions = ref([]);
+const { showDialog, item } = useReport();
 
 const rules = {
   name: [{ required: true, message: 'Please input your username!' }],

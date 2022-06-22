@@ -39,7 +39,7 @@
         <a-button type="primary">导入</a-button>
       </template>
       <a-table-column title="一级科室" data-index="name" />
-      <a-table-column title="二级科室" data-index="lastName" />
+      <a-table-column title="二级科室" data-index="childrenName" />
       <a-table-column title="操作">
         <template #default="{ record }">
           <a-space>

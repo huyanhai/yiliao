@@ -8,13 +8,14 @@
         </a-input-group>
         <div style="margin-top: 10px">
           <a-tag
-            v-for="(it, index) in children"
+            v-for="(it, index) in item.children"
             :key="index"
             style="margin-bottom: 5px"
             closable
-            @close="close(index)"
-            >{{ it }}</a-tag
+            @close="close(it.id)"
           >
+            {{ it.name }}
+          </a-tag>
         </div>
       </a-form-item>
       <a-form-item label="描述">
@@ -39,26 +40,28 @@
 import { ref } from 'vue';
 
 import { useServer } from '../hooks/useServer';
-import { departmentInfoInsert } from '@/api';
+import { departmentInfoInsert, departmentInfoDelete } from '@/api';
 
-const { editDialog, getList, item } = useServer();
+const { editDialog, getList, item, edit } = useServer();
 
 const form = ref({
   name: '',
 });
 
-const children = ref([]);
-
 const reset = () => {
   form.value.name = '';
-  children.value = [];
   editDialog.value = false;
 };
 
-const close = (index: number) => {
-  children.value.splice(index, 1);
-};
+const close = async (item: any) => {
+  const { success } = await departmentInfoDelete({
+    id: item,
+  });
 
+  if (success) {
+    edit(item.value, true);
+  }
+};
 const addItem = async () => {
   if (!form.value.name) return;
   const { success } = await departmentInfoInsert({
@@ -67,7 +70,8 @@ const addItem = async () => {
     name: form.value.name,
   });
   if (success) {
-    children.value.push(form.value.name);
+    form.value.name = '';
+    edit(item.value, true);
   }
 };
 </script>

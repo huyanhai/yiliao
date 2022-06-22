@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { departmentInfo } from '@/api';
+import { departmentInfo, departmentInfoGetById } from '@/api';
 
 // 新增一级
 const showDialog = ref(false);
@@ -40,9 +40,16 @@ const reset = () => {
   };
 };
 
-const edit = (info: any) => {
-  item.value = info;
-  editDialog.value = !editDialog.value;
+const edit = async (info: any, set = false) => {
+  const { data, success } = await departmentInfoGetById({
+    id: info.id,
+  });
+  if (success) {
+    item.value = data;
+  }
+  if (!set) {
+    editDialog.value = !editDialog.value;
+  }
 };
 
 const getList = async () => {

@@ -10,33 +10,37 @@
         </a-form-item>
         <a-form-item label="">
           <a-space>
-            <a-button type="primary">查询</a-button>
-            <a-button>重置</a-button>
+            <a-button type="primary" @click="getList">查询</a-button>
+            <a-button
+              @click="
+                reset();
+                getList();
+              "
+            >
+              重置
+            </a-button>
           </a-space>
         </a-form-item>
       </a-form>
     </a-card>
-
-    <my-table :data-source="[1]" :pagination="pagination" @change="onPageChange">
+    <my-table :data-source="list" :pagination="pagination" @change="onPageChange">
       <template #left>床位管理</template>
       <template #right>
         <a-button type="primary" @click="showDialog = true">新增</a-button>
         <a-button type="primary">导入</a-button>
       </template>
-      <a-table-column key="name" title="床位号" data-index="lastName" />
-      <a-table-column key="name" title="所属医院" data-index="lastName" />
-      <a-table-column key="name" title="状态" data-index="lastName">
+      <a-table-column data-index="name" title="床位号" />
+      <a-table-column data-index="hospitalId" title="所属医院" />
+      <a-table-column title="状态">
         <template #default="{ record }">
           <a-switch v-model:checked="record.status" checked-children="开" un-checked-children="关" />
         </template>
       </a-table-column>
-      <a-table-column key="name" title="操作" data-index="lastName">
+      <a-table-column title="操作">
         <template #default="{ record }">
           <a-space>
             <a-button type="primary" size="small" @click="edit(record)">编辑</a-button>
-            <a-button type="primary" size="small">启用</a-button>
-            <a-button type="primary" size="small" danger>禁用</a-button>
-            <a-button type="primary" size="small" danger>删除</a-button>
+            <a-button type="primary" size="small" danger @click="del(record)">删除</a-button>
           </a-space>
         </template>
       </a-table-column>
@@ -45,35 +49,37 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { hospitalInfoList } from '@/api';
+import { onMounted } from 'vue';
+import { Modal } from 'ant-design-vue';
+
 import { useBed } from './hooks/useBed';
+
+import { bedInfoDelete } from '@/api';
 
 import MyTable from '@/components/table.vue';
 import MyDialog from './components/BedDialog.vue';
 
-const loading = ref(false);
-
-const formData = ref({
-  name: '',
-  type: '',
-  level: '',
-});
-
-const pagination = {
-  defaultCurrent: 1,
-  defaultPageSize: 10,
-  total: 100,
-};
-
-const { edit, showDialog } = useBed();
-
-const getList = async () => {
-  hospitalInfoList({ pageIndex: pagination.defaultCurrent, pageSize: pagination.defaultPageSize });
-};
+const { showDialog, pagination, formData, list, getList, reset, edit } = useBed();
 
 const onPageChange = (pageInfo: any) => {
-  console.log('onPageChange', pageInfo);
+  pagination.value.defaultCurrent = pageInfo.current;
+  pagination.value.defaultPageSize = pageInfo.pageSize;
+  getList();
+};
+
+const del = (item: any) => {
+  Modal.confirm({
+    title: '确认删除',
+    content: '确认删除数据?',
+    okText: '确认',
+    cancelText: '取消',
+    onOk: async () => {
+      const { success } = await bedInfoDelete({ id: item.id });
+      if (success) {
+        getList();
+      }
+    },
+  });
 };
 
 onMounted(() => {

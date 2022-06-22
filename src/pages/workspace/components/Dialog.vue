@@ -81,32 +81,6 @@
             key: 'id',
           }"
         />
-        <!-- <a-form-item-rest>
-          <a-row :gutter="16">
-            <a-col :span="12">
-              一级科室
-              <more-check
-                v-model:value="activeItem.departmentIds"
-                :options="[
-                  { value: 1, label: '王小明' },
-                  { value: 2, label: '王小明' },
-                ]"
-                @on-update:value="(e) => (activeItem.departmentIds = e)"
-              />
-            </a-col>
-            <a-col :span="12">
-              二级科室
-              <more-check
-                v-model:value="activeItem.departments"
-                :options="[
-                  { value: 1, label: '王小明' },
-                  { value: 2, label: '王小明' },
-                ]"
-                @on-update:value="(e) => (activeItem.departments = e)"
-              />
-            </a-col>
-          </a-row>
-        </a-form-item-rest> -->
       </a-form-item>
       <a-form-item label="医院简介" name="introduction" :rules="rules.introduction">
         <a-textarea v-model:value="activeItem.introduction" placeholder="请填写医院简介" />
@@ -122,9 +96,8 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, computed, ref } from 'vue';
-import MoreCheck from '@/components/MoreCheck.vue';
 import { useWorkspace } from '../hooks/useWorkspace';
-import { departmentInfoGet, hospitalInfoInsert, uploadImg, hospitalInfoUpdate } from '@/api';
+import { hospitalInfoInsert, uploadImg, hospitalInfoUpdate } from '@/api';
 import { useDictStore } from '@/store';
 
 const { showDialog, activeItem, reset, getList } = useWorkspace();
@@ -187,7 +160,7 @@ const handleChange = async (e) => {
 };
 
 onMounted(async () => {
-  departmentInfoGet({});
+  console.log(activeItem.value);
 });
 </script>
 

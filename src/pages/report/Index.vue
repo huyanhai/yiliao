@@ -22,7 +22,7 @@
       </a-form>
     </a-card>
 
-    <my-table :data-source="[1]" :pagination="pagination" @change="onPageChange">
+    <my-table :data-source="list" :loading="loading" :pagination="pagination" @change="onPageChange">
       <template #left>报告管理</template>
       <template #right>
         <!-- <a-button type="primary" @click="showDialog = true">新增</a-button>
@@ -36,9 +36,9 @@
       <a-table-column key="name" title="操作" data-index="lastName">
         <template #default="{ record }">
           <a-space>
-            <a-button type="primary" size="small" @click="edit(record)">报告下载</a-button>
-            <a-button type="primary" size="small" @click="edit(record)">原始数据下载</a-button>
-            <a-button type="primary" size="small" danger @click="edit(record)">删除</a-button>
+            <a-button type="primary" size="small" @click="downLoad(record)">报告下载</a-button>
+            <a-button type="primary" size="small" @click="downLoad(record)">原始数据下载</a-button>
+            <a-button type="primary" size="small" danger @click="del(record)">删除</a-button>
           </a-space>
         </template>
       </a-table-column>
@@ -47,35 +47,40 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { hospitalInfoList } from '@/api';
-import { usePatient } from './hooks/usePatient';
+import { Modal } from 'ant-design-vue';
+
+import { onMounted } from 'vue';
+import { reportInfoDelete } from '@/api';
+import { useReport } from './hooks/useReport';
 
 import MyTable from '@/components/table.vue';
 import MyDialog from './components/Dialog.vue';
 
-const loading = ref(false);
-
-const formData = ref({
-  name: '',
-  type: '',
-  level: '',
-});
-
-const pagination = {
-  defaultCurrent: 1,
-  defaultPageSize: 10,
-  total: 100,
-};
-
-const { edit, showDialog } = usePatient();
-
-const getList = async () => {
-  hospitalInfoList({ pageIndex: pagination.defaultCurrent, pageSize: pagination.defaultPageSize });
-};
+const { loading, pagination, list, formData, getList } = useReport();
 
 const onPageChange = (pageInfo: any) => {
-  console.log('onPageChange', pageInfo);
+  pagination.value.defaultCurrent = pageInfo.current;
+  pagination.value.defaultPageSize = pageInfo.pageSize;
+  getList();
+};
+
+const del = (item: any) => {
+  Modal.confirm({
+    title: '确认删除',
+    content: '确认删除数据?',
+    okText: '确认',
+    cancelText: '取消',
+    onOk: async () => {
+      const { success } = await reportInfoDelete({ id: item.id });
+      if (success) {
+        getList();
+      }
+    },
+  });
+};
+
+const downLoad = (item: any) => {
+  console.log(item);
 };
 
 onMounted(() => {

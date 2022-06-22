@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { bedInfoInfo } from '@/api';
+import { deviceInfoInfo } from '@/api';
 
 // 新增一级
 const showDialog = ref(false);
@@ -7,8 +7,15 @@ const showDialog = ref(false);
 const loading = ref(false);
 
 const item = ref<any>({
+  code: '',
   name: '',
   hospitalId: '',
+  mac: '',
+  productKey: '',
+  deviceName: '',
+  deviceSecret: '',
+  deviceType: '',
+  status: '1',
 });
 
 const list = ref([]);
@@ -26,10 +33,15 @@ const formData = ref({
 
 const reset = () => {
   item.value = {
-    hospitalName: '',
-    titleType: '',
+    code: '',
+    name: '',
     hospitalId: '',
-    departmentId1: '',
+    mac: '',
+    productKey: '',
+    deviceName: '',
+    deviceSecret: '',
+    deviceType: '',
+    status: '',
   };
   pagination.value = {
     defaultCurrent: 1,
@@ -44,7 +56,7 @@ const reset = () => {
 
 const getList = async () => {
   loading.value = true;
-  const { data = [], success } = await bedInfoInfo({
+  const { data = [], success } = await deviceInfoInfo({
     pageIndex: pagination.value.defaultCurrent,
     pageSize: pagination.value.defaultPageSize,
     ...formData.value,
@@ -65,13 +77,14 @@ const edit = (items: any) => {
   showDialog.value = true;
 };
 
-export const useBed = () => {
+export const useDevice = () => {
   return {
     showDialog,
     item,
     list,
     pagination,
     formData,
+    loading,
 
     getList,
     reset,
