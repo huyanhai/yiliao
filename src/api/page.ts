@@ -252,3 +252,119 @@ export function reportInfoDelete(data): any {
     params: data,
   });
 }
+
+/**
+ * 角色管理
+ */
+// 角色列表
+export function roleInfoInfo(data): any {
+  return request.get('/api/roleInfo/getByPage', {
+    params: data,
+  });
+}
+
+// 所有角色
+export function roleInfoAll(data?: any): any {
+  return request.get('/api/roleInfo/gets', {
+    params: data,
+  });
+}
+
+// 角色详情
+export function roleInfoGetById(data): any {
+  return request.get('/api/roleInfo/getById', {
+    params: data,
+  });
+}
+
+// 新增角色
+export function roleInfoInsert(data): any {
+  return request.post('/api/roleInfo/insert', data);
+}
+
+// 修改角色
+export function roleInfoUpdate(data): any {
+  return request.post('/api/roleInfo/update', data);
+}
+
+// 删除角色
+export function roleInfoDelete(data): any {
+  return request.post('/api/roleInfo/delete', data, {
+    params: data,
+  });
+}
+
+/**
+ * 权限管理
+ */
+// 权限列表
+export function permissionInfoInfo(data): any {
+  return request.get('/api/permissionInfo/getByPage', {
+    params: data,
+  });
+}
+
+// 所有权限
+export function permissionInfoAll(data?: any): any {
+  return request.get('/api/permissionInfo/gets', {
+    params: data,
+  });
+}
+
+// 权限详情
+export function permissionInfoGetById(data): any {
+  return request.get('/api/permissionInfo/getById', {
+    params: data,
+  });
+}
+
+// 新增权限
+export function permissionInfoInsert(data): any {
+  return request.post('/api/permissionInfo/insert', data);
+}
+
+// 修改权限
+export function permissionInfoUpdate(data): any {
+  return request.post('/api/permissionInfo/update', data);
+}
+
+// 删除权限
+export function permissionInfoDelete(data): any {
+  return request.post('/api/permissionInfo/delete', data, {
+    params: data,
+  });
+}
+
+/**
+ * 用户管理
+ */
+// 用户列表
+export function userInfo(data): any {
+  return request.get('/api/user/getByPage', {
+    params: data,
+  });
+}
+
+// 用户详情
+export function userGetById(data): any {
+  return request.get('/api/user/getById', {
+    params: data,
+  });
+}
+
+// 新增用户
+export function userInsert(data): any {
+  return request.post('/api/user/insert', data);
+}
+
+// 修改用户
+export function userUpdate(data): any {
+  return request.post('/api/user/update', data);
+}
+
+// 删除用户
+export function userDelete(data): any {
+  return request.post('/api/user/delete', data, {
+    params: data,
+  });
+}

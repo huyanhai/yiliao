@@ -17,14 +17,20 @@
         </a-form-item>
         <a-form-item label="">
           <a-space>
-            <a-button type="primary">查询</a-button>
-            <a-button>重置</a-button>
+            <a-button type="primary" @click="getList()">查询</a-button>
+            <a-button
+              @click="
+                reset();
+                getList();
+              "
+              >重置</a-button
+            >
           </a-space>
         </a-form-item>
       </a-form>
     </a-card>
 
-    <my-table :data-source="[1]" :pagination="pagination" @change="onPageChange">
+    <my-table :data-source="list" :loading="loading" :pagination="pagination" @change="onPageChange">
       <template #left>菜单管理</template>
       <template #right>
         <a-button type="primary" @click="showDialog = true">新增</a-button>
@@ -41,7 +47,7 @@
         <template #default="{ record }">
           <a-space>
             <a-button type="primary" size="small" @click="edit(record)">编辑</a-button>
-            <a-button type="primary" size="small" danger @click="edit(record)">删除</a-button>
+            <a-button type="primary" size="small" danger @click="del(record)">删除</a-button>
             <a-button type="primary" size="small" @click="edit(record)">上线</a-button>
             <a-button type="primary" size="small" @click="edit(record)">下线</a-button>
           </a-space>
@@ -52,39 +58,41 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { hospitalInfoList } from '@/api';
+import { Modal } from 'ant-design-vue';
+
+import { onMounted } from 'vue';
+import { permissionInfoDelete } from '@/api';
 import { useMenu } from './hooks/useMenu';
 
 import MyTable from '@/components/table.vue';
-import MyDialog from './components/Dialog.vue';
+import MyDialog from './components/MenuDialog.vue';
 
-const loading = ref(false);
-
-const formData = ref({
-  name: '',
-  type: '',
-  level: '',
-});
-
-const pagination = {
-  defaultCurrent: 1,
-  defaultPageSize: 10,
-  total: 100,
-};
-
-const { edit, showDialog } = useMenu();
-
-const getList = async () => {
-  hospitalInfoList({ pageIndex: pagination.defaultCurrent, pageSize: pagination.defaultPageSize });
-};
+const { loading, pagination, list, formData, showDialog, getList, getAllPermission, reset, edit } = useMenu();
 
 const onPageChange = (pageInfo: any) => {
-  console.log('onPageChange', pageInfo);
+  pagination.value.defaultCurrent = pageInfo.current;
+  pagination.value.defaultPageSize = pageInfo.pageSize;
+  getList();
+};
+
+const del = (item: any) => {
+  Modal.confirm({
+    title: '确认删除',
+    content: '确认删除数据?',
+    okText: '确认',
+    cancelText: '取消',
+    onOk: async () => {
+      const { success } = await permissionInfoDelete({ id: item.id });
+      if (success) {
+        getList();
+      }
+    },
+  });
 };
 
 onMounted(() => {
   getList();
+  getAllPermission();
 });
 </script>
 

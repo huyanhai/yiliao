@@ -1,5 +1,5 @@
 <template>
-  <div>密码</div>
+  <a-card style="margin-bottom: 20px" class="my-card"></a-card>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue';

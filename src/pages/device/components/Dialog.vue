@@ -70,7 +70,7 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'ant-design-vue';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useDevice } from '../hooks/useDevice';
 import { deviceInfoUpdate, deviceInfoInsert } from '@/api';
 import { useDictStore } from '@/store';
