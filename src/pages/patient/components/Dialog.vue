@@ -7,8 +7,8 @@
     </a-form>
     <template #footer>
       <a-space>
-        <a-button type="primary">提交</a-button>
-        <a-button>返回</a-button>
+        <a-button type="primary" @click="showDialog = false">提交</a-button>
+        <a-button @click="showDialog = false">返回</a-button>
       </a-space>
     </template>
   </a-modal>

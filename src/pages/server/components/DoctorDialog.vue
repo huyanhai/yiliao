@@ -1,8 +1,8 @@
 <template>
   <a-modal v-model:visible="showDialog" title="添加医生" width="600px" :closable="false">
     <a-form ref="formRef" :model="item" :label-col="{ span: 4 }" :rules="rules">
-      <a-form-item label="医生名称" name="hospitalName">
-        <a-input v-model:value="item.hospitalName" />
+      <a-form-item label="医生名称" name="name">
+        <a-input v-model:value="item.name" />
       </a-form-item>
       <a-form-item label="医生职称" name="titleType">
         <a-select
@@ -15,7 +15,8 @@
           :options="doctorType"
         />
       </a-form-item>
-      <a-form-item label="所属医院" name="hospitalInfo">
+      <a-form-item label="所属医院" name="hospitalId">
+        {{ item.hospitalId }}
         <a-tree-select
           v-model:value="item.hospitalId"
           style="width: 100%"
@@ -46,7 +47,13 @@
     <template #footer>
       <a-space>
         <a-button type="primary" :loading="loading" @click="confirm">提交</a-button>
-        <a-button>关闭</a-button>
+        <a-button
+          @click="
+            reset();
+            showDialog = false;
+          "
+          >关闭</a-button
+        >
       </a-space>
     </template>
   </a-modal>
@@ -67,9 +74,9 @@ const loading = ref(false);
 
 const formRef = ref<FormInstance>();
 const rules = {
-  hospitalName: [{ required: true, message: '请输入医院名称' }],
+  name: [{ required: true, message: '请输入医生名称' }],
   titleType: [{ required: true, message: '请选择医生职称' }],
-  hospitalInfo: [{ required: true, message: '请选择所属医院' }],
+  hospitalId: [{ required: true, message: '请选择所属医院' }],
   departmentId1: [{ required: true, message: '请选择所属科室' }],
 };
 

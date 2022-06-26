@@ -2,7 +2,17 @@
   <a-modal v-model:visible="showDialog" title="菜单管理" width="600px" :closable="false">
     <a-form ref="formRef" :model="item" :label-col="{ span: 4 }" :rules="rules">
       <a-form-item label="上级菜单">
-        <a-input v-model:value="item.parentId" />
+        <a-tree-select
+          v-model:value="item.parentId"
+          style="width: 100%"
+          :tree-data="allPermission"
+          allow-clear
+          checkable
+          :field-names="{
+            label: 'name',
+            value: 'id',
+          }"
+        />
       </a-form-item>
       <a-form-item label="系统名称" name="name">
         <a-input v-model:value="item.name" />
@@ -25,7 +35,6 @@
           <a-radio value="3" :disabled="!item.parentId">按纽</a-radio>
         </a-radio-group>
       </a-form-item>
-
       <a-form-item label="权限标识">
         <a-input />
       </a-form-item>
@@ -65,7 +74,7 @@ import { useMenu } from '../hooks/useMenu';
 import { permissionInfoInsert, permissionInfoUpdate } from '@/api';
 import { useDictStore } from '@/store';
 
-const { showDialog, item, reset, getList } = useMenu();
+const { showDialog, item, allPermission, reset, getList } = useMenu();
 
 const formRef = ref<FormInstance>();
 const loading = ref(false);
@@ -88,13 +97,15 @@ const confirm = async () => {
     await formRef.value?.validateFields();
     loading.value = true;
     const fn = item.value.id ? permissionInfoUpdate : permissionInfoInsert;
-    const { success } = await fn(item.value).finally(() => {
+    const { success, message } = await fn(item.value).finally(() => {
       loading.value = false;
     });
     if (success) {
       reset();
       getList();
       showDialog.value = false;
+    } else {
+      message.success(message);
     }
   } catch (error) {
     console.log(error);

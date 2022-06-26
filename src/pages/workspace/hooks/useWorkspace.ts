@@ -74,20 +74,15 @@ const reset = () => {
   };
 };
 
-const select = (item: any) => {
-  // item.hospitalLevel = `${item.hospitalLevel}`;
-  // item.hospitalType = `${item.hospitalType}`;
-  // activeItem.value = Object.assign(
-  //   activeItem.value,
-  //   {
-  //     addressArr: [item.provinceId || '', item.cityId || '', item.districtId || ''].filter((item) => item),
-  //   },
-  //   item,
-  // );
-  hospitalInfoById({
+const select = async (item: any) => {
+  const { data, success } = await hospitalInfoById({
     id: item.id,
   });
-  // showDialog.value = !showDialog.value;
+  if (success) {
+    data.addressArr = [data.provinceId || '', data.cityId || '', data.districtId].filter((item) => item);
+    activeItem.value = data;
+    showDialog.value = !showDialog.value;
+  }
 };
 
 const getList = async () => {

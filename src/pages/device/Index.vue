@@ -40,7 +40,11 @@
       <a-table-column title="设备编号" data-index="code" />
       <a-table-column title="所属医院" data-index="hospitalId" />
       <a-table-column title="设备Mac" data-index="mac" />
-      <a-table-column title="设备类型" data-index="deviceType" />
+      <a-table-column title="设备类型" data-index="deviceType">
+        <template #default="{ record }">
+          {{ tsystemType[record.deviceType] }}
+        </template>
+      </a-table-column>
       <a-table-column title="设备状态" data-index="status">
         <template #default="{ record }"> {{ status[record.status] }}</template>
       </a-table-column>
@@ -61,6 +65,8 @@
 import { onMounted } from 'vue';
 import { Modal } from 'ant-design-vue';
 import { useDevice } from './hooks/useDevice';
+
+import { tsystemType } from '@/constants';
 
 import { deviceInfoDelete } from '@/api';
 

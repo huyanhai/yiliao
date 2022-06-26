@@ -368,3 +368,13 @@ export function userDelete(data): any {
     params: data,
   });
 }
+
+/**
+ * 用户管理
+ */
+// 用户列表
+export function operationLog(data?: any): any {
+  return request.get('/api/operationLog/getByPage', {
+    params: data,
+  });
+}

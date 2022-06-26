@@ -1,42 +1,48 @@
-// 合同状态枚举
-export const CONTRACT_STATUS = {
-  FAIL: 0,
-  AUDIT_PENDING: 1,
-  EXEC_PENDING: 2,
-  EXECUTING: 3,
-  FINISH: 4,
-};
+import { computed } from 'vue';
+import { useDictStore } from '@/store';
 
-export const CONTRACT_STATUS_OPTIONS = [
-  { value: CONTRACT_STATUS.FAIL, label: '审核失败' },
-  { value: CONTRACT_STATUS.AUDIT_PENDING, label: '待审核' },
-  { value: CONTRACT_STATUS.EXEC_PENDING, label: '待履行' },
-  { value: CONTRACT_STATUS.EXECUTING, label: '审核成功' },
-  { value: CONTRACT_STATUS.FINISH, label: '已完成' },
-];
+const dict = useDictStore();
 
-// 合同类型枚举
-export const CONTRACT_TYPES = {
-  MAIN: 0,
-  SUB: 1,
-  SUPPLEMENT: 2,
-};
+export const tsystemType = computed(() => {
+  const maps = {};
+  dict.dict.map((item) => {
+    if (item.code === 'system_type') {
+      maps[item.codeValue] = item.codeName;
+    }
+    return item;
+  });
+  return maps;
+});
 
-export const CONTRACT_TYPE_OPTIONS = [
-  { value: CONTRACT_TYPES.MAIN, label: '主合同' },
-  { value: CONTRACT_TYPES.SUB, label: '子合同' },
-  { value: CONTRACT_TYPES.SUPPLEMENT, label: '补充合同' },
-];
+export const tdoctorTitleType = computed(() => {
+  const maps = {};
+  dict.dict.map((item) => {
+    if (item.code === 'doctor_title_type') {
+      maps[item.codeValue] = item.codeName;
+    }
+    return item;
+  });
+  return maps;
+});
 
-// 合同收付类型枚举
-export const CONTRACT_PAYMENT_TYPES = {
-  PAYMENT: 0,
-  RECIPT: 1,
-};
+export const thospitalType = computed(() => {
+  const maps = {};
+  dict.dict.map((item) => {
+    if (item.code === 'hospital_type') {
+      maps[item.codeValue] = item.codeName;
+    }
+    return item;
+  });
+  return maps;
+});
 
-// 通知的优先级对应的TAG类型
-export const NOTIFICATION_TYPES = {
-  low: 'primary',
-  middle: 'warning',
-  high: 'danger',
-};
+export const thospitalLevel = computed(() => {
+  const maps = {};
+  dict.dict.map((item) => {
+    if (item.code === 'hospital_level') {
+      maps[item.codeValue] = item.codeName;
+    }
+    return item;
+  });
+  return maps;
+});

@@ -59,8 +59,16 @@
       <a-table-column title="医院头像" data-index="logoFileId" />
       <a-table-column title="上级医院" data-index="parentId" />
       <a-table-column title="医院地址" data-index="address" />
-      <a-table-column title="医院类型" data-index="hospitalType" />
-      <a-table-column title="医院等级" data-index="hospitalLevel" />
+      <a-table-column title="医院类型" data-index="hospitalType">
+        <template #default="{ record }">
+          {{ tsystemType[record.hospitalType] }}
+        </template>
+      </a-table-column>
+      <a-table-column title="医院等级" data-index="hospitalLevel">
+        <template #default="{ record }">
+          {{ thospitalLevel[record.hospitalLevel] }}
+        </template>
+      </a-table-column>
       <a-table-column title="是否上架" data-index="lastName" />
       <a-table-column title="操作">
         <template #default="{ record }">
@@ -88,6 +96,7 @@
 <script lang="ts" setup>
 import { onMounted, computed } from 'vue';
 import { Modal } from 'ant-design-vue';
+import { tsystemType, thospitalLevel } from '@/constants';
 
 import { useDictStore } from '@/store';
 import { hospitalInfoDelete } from '@/api';

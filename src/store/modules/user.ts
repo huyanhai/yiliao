@@ -3,7 +3,10 @@ import { TOKEN_NAME } from '@/config/global';
 import { store } from '@/store';
 import { login, getUserDetailByLogins } from '@/api';
 
-const InitUserInfo = {
+const InitUserInfo: {
+  roles: [];
+  [key: string]: Record<string, any>;
+} = {
   roles: [],
 };
 

@@ -1,6 +1,5 @@
 <template>
   <a-modal v-model:visible="showDialog" title="添加医院" width="1000px" :label-col="{ span: 4 }" :closable="false">
-    {{ activeItem }}
     <a-form :model="activeItem">
       <a-form-item label="父级医院">
         <a-tree-select

@@ -32,3 +32,13 @@ export function getAllByHospitalId(data?: any): any {
     params: data,
   });
 }
+
+// 修改用户
+export function updateUser(data?: any): any {
+  return request.post('/api/user/update', data);
+}
+
+// 修改密码
+export function updatePassword(data?: any): any {
+  return request.post('/api/user/updatePassword', data);
+}

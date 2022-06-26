@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import { permissionInfoInfo, permissionInfoAll } from '@/api';
+import { getTree } from '@/utils/tools';
 
 const showDialog = ref(false);
 
@@ -16,6 +17,8 @@ const item = ref<any>({
 });
 
 const list = ref([]);
+
+const allPermission = ref([]);
 
 const pagination = ref({
   defaultCurrent: 1,
@@ -67,13 +70,25 @@ const getList = async () => {
   }
 };
 
+const getAllPermission = async () => {
+  const { data } = await permissionInfoAll();
+  const arrs = [
+    {
+      name: '根目录',
+      id: '',
+      key: '',
+      children: [],
+    },
+  ];
+
+  arrs[0].children = getTree(data, '', []);
+  allPermission.value = arrs;
+};
+
 const edit = (items: any) => {
   item.value = JSON.parse(JSON.stringify(items));
   showDialog.value = true;
-};
-
-const getAllPermission = async () => {
-  permissionInfoAll();
+  getAllPermission();
 };
 
 export const useMenu = () => {
@@ -84,6 +99,7 @@ export const useMenu = () => {
     pagination,
     formData,
     loading,
+    allPermission,
 
     getList,
     reset,
