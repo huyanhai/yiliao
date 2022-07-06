@@ -51,7 +51,6 @@ const edit = async (info: any, set = false) => {
     editDialog.value = !editDialog.value;
   }
 };
-
 const getList = async () => {
   loading.value = true;
   const { data = [], success } = await departmentInfo({

@@ -55,13 +55,14 @@
       <a-table-column title="角色名称" data-index="roleNames" />
       <a-table-column title="状态">
         <template #default="{ record }">
-          <a-switch v-model:checked="record.enabled" :disabled="true" />
+          <a-switch v-model:checked="record.enabled" :disabled="true" :un-checked-value="0" :checked-value="1" />
         </template>
       </a-table-column>
       <a-table-column title="创建时间" data-index="createTime" />
       <a-table-column title="操作" data-index="lastName">
         <template #default="{ record }">
           <a-space>
+            <a-button type="primary" size="small" @click="edit(record)">编辑</a-button>
             <a-button type="primary" size="small" danger @click="del(record)">删除</a-button>
           </a-space>
         </template>
@@ -81,7 +82,7 @@ import { useDictStore } from '@/store';
 import MyTable from '@/components/table.vue';
 import MyDialog from './components/Dialog.vue';
 
-const { loading, pagination, list, formData, showDialog, roleList, getList, getRoleList, reset } = useAccount();
+const { loading, pagination, list, formData, showDialog, roleList, getList, getRoleList, reset, edit } = useAccount();
 
 const dictStore = useDictStore();
 

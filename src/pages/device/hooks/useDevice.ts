@@ -27,8 +27,9 @@ const pagination = ref({
 });
 
 const formData = ref({
-  name: '',
-  hospitalId: '',
+  code: '',
+  hospitalName: '',
+  status: '',
 });
 
 const reset = () => {
@@ -49,8 +50,9 @@ const reset = () => {
     total: 0,
   };
   formData.value = {
-    name: '',
-    hospitalId: '',
+    code: '',
+    hospitalName: '',
+    status: '',
   };
 };
 

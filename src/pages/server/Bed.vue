@@ -30,7 +30,7 @@
         <a-button type="primary">导入</a-button>
       </template>
       <a-table-column data-index="name" title="床位号" />
-      <a-table-column data-index="hospitalId" title="所属医院" />
+      <a-table-column data-index="hospitalName" title="所属医院" />
       <a-table-column title="状态">
         <template #default="{ record }">
           <a-switch v-model:checked="record.status" checked-children="开" un-checked-children="关" />

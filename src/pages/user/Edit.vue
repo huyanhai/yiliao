@@ -3,7 +3,9 @@
     <a-form ref="formRef" :model="user" :label-col="{ span: 4 }" layout="vertical" :rules="rules">
       <a-row :gutter="16">
         <a-col :span="6">
-          <a-form-item label="员工工号" name="id"> <a-input v-model:value="user.id" disabled="true" /> </a-form-item>
+          <a-form-item label="员工工号" name="jobNo">
+            <a-input v-model:value="user.jobNo" />
+          </a-form-item>
         </a-col>
         <a-col :span="6">
           <a-form-item label="员工姓名" name="userName">

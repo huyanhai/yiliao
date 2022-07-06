@@ -1,18 +1,15 @@
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 import { getUserStore } from '@/store';
+import release from '@/config/proxy';
 
-const host = '/';
+const host = process.env.NODE_ENV === 'release' ? release.release.host : '/';
 
-const CODE = {
-  LOGIN_TIMEOUT: 1000,
-  REQUEST_SUCCESS: 0,
-  REQUEST_FOBID: 1001,
-};
+console.log('host', host);
 
 const instance = axios.create({
   baseURL: host,
   timeout: 1000,
-  withCredentials: true,
 });
 
 instance.defaults.timeout = 5000;
@@ -35,6 +32,10 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use(
   (rawResponse) => {
     // const { config } = rawResponse;
+    if (rawResponse.data?.code !== '0') {
+      message.error(rawResponse.data.message);
+    }
+
     return Promise.resolve(rawResponse.data);
   },
   (rawError) => {

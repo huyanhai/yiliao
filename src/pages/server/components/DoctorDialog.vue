@@ -16,7 +16,6 @@
         />
       </a-form-item>
       <a-form-item label="所属医院" name="hospitalId">
-        {{ item.hospitalId }}
         <a-tree-select
           v-model:value="item.hospitalId"
           style="width: 100%"
@@ -30,9 +29,9 @@
           @change="treeChange"
         />
       </a-form-item>
-      <a-form-item label="所属科室" name="departmentId1">
+      <a-form-item label="所属科室" name="departmentId">
         <a-tree-select
-          v-model:value="item.departmentId1"
+          v-model:value="item.departmentId"
           style="width: 100%"
           :tree-data="keshiArr"
           allow-clear
@@ -64,12 +63,10 @@ import type { FormInstance } from 'ant-design-vue';
 import { useDictStore } from '@/store';
 
 import { useDoctor } from '../hooks/useDoctor';
-import { getAllByHospitalId, doctorInfoInsert } from '@/api';
-import { getTree } from '@/utils/tools';
+import { doctorInfoInsert, doctorInfoUpdate } from '@/api';
 
-const { showDialog, item, reset, getList } = useDoctor();
+const { showDialog, item, keshiArr, reset, getList, treeChange } = useDoctor();
 
-const keshiArr = ref([]);
 const loading = ref(false);
 
 const formRef = ref<FormInstance>();
@@ -77,7 +74,7 @@ const rules = {
   name: [{ required: true, message: '请输入医生名称' }],
   titleType: [{ required: true, message: '请选择医生职称' }],
   hospitalId: [{ required: true, message: '请选择所属医院' }],
-  departmentId1: [{ required: true, message: '请选择所属科室' }],
+  departmentId: [{ required: true, message: '请选择所属科室' }],
 };
 
 const dictStore = useDictStore();
@@ -90,20 +87,12 @@ const hospitalInfo = computed(() => {
   return dictStore.hospitalInfo;
 });
 
-const treeChange = async (v: any) => {
-  const { data, success } = await getAllByHospitalId({
-    id: v,
-  });
-  if (success) {
-    keshiArr.value = getTree(data, '00000000-0000-0000-0000-000000000000', []);
-  }
-};
-
 const confirm = async () => {
   try {
     await formRef.value?.validateFields();
     loading.value = true;
-    const { success } = await doctorInfoInsert(item.value).finally(() => {
+    const fn = item.value.id ? doctorInfoUpdate : doctorInfoInsert;
+    const { success } = await fn(item.value).finally(() => {
       loading.value = false;
     });
     if (success) {

@@ -46,3 +46,10 @@ export const thospitalLevel = computed(() => {
   });
   return maps;
 });
+
+export const btnType = {
+  1: '系统',
+  2: '目录',
+  3: '页面',
+  4: '按钮',
+};

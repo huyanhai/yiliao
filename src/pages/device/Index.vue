@@ -3,16 +3,17 @@
     <a-card style="margin-bottom: 20px" class="my-card">
       <a-form layout="inline">
         <a-form-item label="设备编号">
-          <a-select v-model="formData.type" style="width: 200px">
-            <a-select-option value="jack">Jack</a-select-option>
-          </a-select>
+          <a-input v-model="formData.code" style="width: 200px" />
         </a-form-item>
         <a-form-item label="医院名称">
-          <a-input v-model:value="formData.name" style="width: 200px" />
+          <a-input v-model:value="formData.hospitalName" style="width: 200px" />
         </a-form-item>
         <a-form-item label="设备状态">
-          <a-select v-model="formData.type" style="width: 200px">
-            <a-select-option value="jack">Jack</a-select-option>
+          <a-select v-model:value="formData.status" style="width: 200px">
+            <a-select-option value="1">启用</a-select-option>
+            <a-select-option value="2">禁用</a-select-option>
+            <a-select-option value="3">报损</a-select-option>
+            <a-select-option value="4">报修</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="">
@@ -38,7 +39,7 @@
       </template>
       <a-table-column title="设备名称" data-index="name" />
       <a-table-column title="设备编号" data-index="code" />
-      <a-table-column title="所属医院" data-index="hospitalId" />
+      <a-table-column title="所属医院" data-index="hospitalName" />
       <a-table-column title="设备Mac" data-index="mac" />
       <a-table-column title="设备类型" data-index="deviceType">
         <template #default="{ record }">
@@ -51,8 +52,8 @@
       <a-table-column title="操作">
         <template #default="{ record }">
           <a-space>
-            <a-button type="primary" size="small" @click="edit(record)">上线</a-button>
-            <a-button type="primary" size="small" danger @click="edit(record)">下线</a-button>
+            <!-- <a-button type="primary" size="small" @click="edit(record)">上线</a-button>
+            <a-button type="primary" size="small" danger @click="edit(record)">下线</a-button> -->
             <a-button type="primary" size="small" danger @click="del(record)">删除</a-button>
           </a-space>
         </template>

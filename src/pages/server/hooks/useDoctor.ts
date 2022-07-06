@@ -1,5 +1,6 @@
 import { ref } from 'vue';
-import { doctorInfo, doctorInfoGetById } from '@/api';
+import { doctorInfo, doctorUpdateEnabled, getAllByHospitalId } from '@/api';
+import { getTree } from '@/utils/tools';
 
 // 新增一级
 const showDialog = ref(false);
@@ -8,6 +9,8 @@ const showDialog = ref(false);
 const editDialog = ref(false);
 
 const loading = ref(false);
+
+const keshiArr = ref([]);
 
 const item = ref<any>({
   hospitalName: '',
@@ -48,10 +51,19 @@ const reset = () => {
     departmentId1: '',
   };
 };
+const treeChange = async (v: any) => {
+  const { data, success } = await getAllByHospitalId({
+    id: v,
+  });
+  if (success) {
+    keshiArr.value = getTree(data, '00000000-0000-0000-0000-000000000000', []);
+  }
+};
 
-const edit = (item: any) => {
-  item.value = {};
-  editDialog.value = !editDialog.value;
+const edit = (items: any) => {
+  treeChange(items.id);
+  item.value = items;
+  showDialog.value = !showDialog.value;
 };
 
 const getList = async () => {
@@ -72,6 +84,15 @@ const getList = async () => {
   }
 };
 
+const disable = (items: any) => {
+  doctorUpdateEnabled({
+    id: items.id,
+    enabled: items.enabled,
+  }).then(() => {
+    getList();
+  });
+};
+
 export const useDoctor = () => {
   return {
     showDialog,
@@ -80,9 +101,12 @@ export const useDoctor = () => {
     list,
     pagination,
     formData,
+    keshiArr,
 
+    treeChange,
     edit,
     getList,
     reset,
+    disable,
   };
 };

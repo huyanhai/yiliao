@@ -1,13 +1,21 @@
 <template>
-  <a-modal v-model:visible="showRoleOpDialog" title="角色管理" width="600px" :closable="false">
-    <my-table>
-      <a-table-column title="系统" data-index="lastName" />
-      <a-table-colum title="模块" data-index="lastName" />
-      <a-table-column title="页面名称" data-index="lastName" />
-      <a-table-column title="操作" data-index="lastName">
-        <template #default="{ record }"> </template>
-      </a-table-column>
-    </my-table>
+  <a-modal v-model:visible="showRoleOpDialog" title="权限管理" width="600px" :closable="false">
+    <a-form ref="formRef" :model="permission" :label-col="{ span: 4 }" :rules="rules">
+      <a-form-item label="" name="systemType">
+        <a-tree
+          v-model:selectedKeys="permission.list"
+          v-model:checkedKeys="permission.list"
+          checkable
+          style="width: 100%"
+          :tree-data="permissionTree"
+          :field-names="{
+            title: 'name',
+            key: 'id',
+          }"
+        />
+      </a-form-item>
+    </a-form>
+
     <template #footer>
       <a-space>
         <a-button type="primary" @click="confirm">提交</a-button>
@@ -28,19 +36,30 @@ import type { FormInstance } from 'ant-design-vue';
 
 import { ref } from 'vue';
 import { useRole } from '../hooks/useRole';
-import { roleInfoInsert, roleInfoUpdate } from '@/api';
+import { setPermission } from '@/api';
 
-const { showRoleOpDialog, item, reset, getList } = useRole();
+const { showRoleOpDialog, permission, activeItem, permissionTree, reset, getList } = useRole();
 
 const formRef = ref<FormInstance>();
 const loading = ref(false);
+
+const rules = {
+  list: [{ required: true, message: '请勾选权限' }],
+};
 
 const confirm = async () => {
   try {
     await formRef.value?.validateFields();
     loading.value = true;
-    const fn = item.value.id ? roleInfoUpdate : roleInfoInsert;
-    const { success } = await fn(item.value).finally(() => {
+    console.log({
+      permissionIds: permission.value.list,
+      id: activeItem.value?.id,
+    });
+
+    const { success } = await setPermission({
+      permissionIds: permission.value.list,
+      id: activeItem.value?.id,
+    }).finally(() => {
       loading.value = false;
     });
     if (success) {

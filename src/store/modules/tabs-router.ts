@@ -4,7 +4,7 @@ import { store } from '@/store';
 
 const homeRoute: Array<TRouterInfo> = [
   {
-    path: '/dashboard/base',
+    path: '/workspace/base',
     routeIdx: 0,
     title: '仪表盘',
     name: 'DashboardBase',

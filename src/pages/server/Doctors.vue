@@ -8,11 +8,19 @@
         <a-form-item label="医院名称">
           <a-input v-model:value="formData.hospitalName" style="width: 200px" />
         </a-form-item>
-        <a-form-item label="一级科室">
-          <a-select v-model="formData.departmentId1" style="width: 200px">
-            <a-select-option value="jack">Jack</a-select-option>
-          </a-select>
-        </a-form-item>
+        <!-- <a-form-item label="一级科室">
+          <a-tree-select
+            v-model:value="formData.departmentId"
+            :tree-data="keshiArr"
+            allow-clear
+            style="width: 200px"
+            checkable
+            :field-names="{
+              label: 'name',
+              value: 'id',
+            }"
+          />
+        </a-form-item> -->
         <a-form-item label="">
           <a-space>
             <a-button type="primary" @click="getList">查询</a-button>
@@ -36,20 +44,29 @@
         <a-button type="primary">导入</a-button>
       </template>
       <a-table-column title="医生姓名" data-index="name" />
-      <a-table-column title="医生职称" data-index="titleType" />
+      <a-table-column title="医生职称" data-index="titleType">
+        <template #default="{ record }">
+          {{ tdoctorTitleType[record.titleType] }}
+        </template>
+      </a-table-column>
       <a-table-column title="所属医院" data-index="hospitalName" />
-      <a-table-column title="所属科室" data-index="departmentId1" />
+      <a-table-column title="所属科室" data-index="departmentName" />
       <a-table-column title="状态">
         <template #default="{ record }">
-          <a-switch v-model:checked="record.status" checked-children="开" disabled un-checked-children="关" />
+          <a-switch
+            v-model:checked="record.enabled"
+            checked-children="开"
+            un-checked-children="关"
+            :un-checked-value="false"
+            :checked-value="true"
+            @click="change(record)"
+          />
         </template>
       </a-table-column>
       <a-table-column title="操作">
         <template #default="{ record }">
           <a-space>
             <a-button type="primary" size="small" @click="edit(record)">编辑</a-button>
-            <a-button type="primary" size="small">启用</a-button>
-            <a-button type="primary" size="small" danger>禁用</a-button>
             <a-button type="primary" size="small" danger @click="del(record)">删除</a-button>
           </a-space>
         </template>
@@ -67,8 +84,9 @@ import { useDoctor } from './hooks/useDoctor';
 import MyTable from '@/components/table.vue';
 import MyDialog from './components/DoctorDialog.vue';
 import { doctorInfoDelete } from '@/api';
+import { tdoctorTitleType } from '@/constants';
 
-const { showDialog, pagination, formData, list, edit, getList, reset } = useDoctor();
+const { showDialog, pagination, formData, list, edit, getList, reset, disable } = useDoctor();
 
 const onPageChange = (pageInfo: any) => {
   pagination.value.defaultCurrent = pageInfo.current;
@@ -89,6 +107,10 @@ const del = (item: any) => {
       }
     },
   });
+};
+
+const change = (item: any) => {
+  disable(item);
 };
 
 onMounted(() => {

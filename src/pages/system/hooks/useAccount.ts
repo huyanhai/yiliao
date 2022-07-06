@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { userInfo, roleInfoAll } from '@/api';
+import { userInfo, roleInfoAll, userGetById } from '@/api';
 
 // 新增一级
 const showDialog = ref(false);
@@ -73,9 +73,14 @@ const getList = async () => {
   }
 };
 
-const edit = (items: any) => {
-  item.value = JSON.parse(JSON.stringify(items));
-  showDialog.value = true;
+const edit = async (items: any) => {
+  const { data } = await userGetById({
+    id: items.id,
+  });
+  if (data) {
+    item.value = data;
+    showDialog.value = true;
+  }
 };
 
 const getRoleList = async () => {

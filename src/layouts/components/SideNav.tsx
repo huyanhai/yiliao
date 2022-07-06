@@ -112,7 +112,7 @@ export default defineComponent({
     });
 
     const goHome = () => {
-      router.push('/dashboard/base');
+      router.push('/workspace/base');
     };
 
     return {
@@ -142,11 +142,7 @@ export default defineComponent({
                   )}
                 </span>
               ),
-            operations: () => (
-              <span class="version-container">
-                {!this.collapsed && 'TDesign Starter'} {pgk.version}
-              </span>
-            ),
+            operations: () => <span class="version-container">{!this.collapsed && ''}</span>,
           }}
         >
           <MenuContent navData={this.menu} />

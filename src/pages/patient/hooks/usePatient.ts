@@ -8,7 +8,10 @@ const loading = ref(false);
 
 const item = ref<any>({
   name: '',
-  hospitalId: '',
+  cardId: '',
+  telPhone: '',
+  age: '',
+  sex: '',
 });
 
 const list = ref([]);
@@ -21,15 +24,15 @@ const pagination = ref({
 
 const formData = ref({
   name: '',
-  hospitalId: '',
 });
 
 const reset = () => {
   item.value = {
-    hospitalName: '',
-    titleType: '',
-    hospitalId: '',
-    departmentId1: '',
+    name: '',
+    cardId: '',
+    telPhone: '',
+    age: '',
+    sex: '',
   };
   pagination.value = {
     defaultCurrent: 1,
@@ -38,7 +41,6 @@ const reset = () => {
   };
   formData.value = {
     name: '',
-    hospitalId: '',
   };
 };
 

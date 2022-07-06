@@ -2,6 +2,8 @@ import { ConfigEnv, UserConfig, loadEnv } from 'vite';
 import createVuePlugin from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import svgLoader from 'vite-svg-loader';
+import Components from 'unplugin-vue-components/vite';
+import { AntDesignVueResolver, TDesignResolver } from 'unplugin-vue-components/resolvers';
 
 import path from 'path';
 
@@ -18,7 +20,29 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       },
     },
 
-    plugins: [createVuePlugin(), vueJsx(), svgLoader()],
+    plugins: [
+      createVuePlugin(),
+      vueJsx(),
+      svgLoader(),
+      Components({
+        resolvers: [
+          AntDesignVueResolver(),
+          // TDesignResolver({
+          //   library: 'vue-next',
+          // }),
+        ],
+      }),
+    ],
+    build: {
+      rollupOptions: {
+        manualChunks: {
+          vue: ['vue'],
+          'vue-router': ['vue-router'],
+          'tdesign-vue-next': ['tdesign-vue-next'],
+          'ant-design-vue': ['ant-design-vue'],
+        },
+      },
+    },
 
     server: {
       port: 3002,

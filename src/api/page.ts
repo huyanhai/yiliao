@@ -117,6 +117,11 @@ export function doctorInfoDelete(data): any {
   });
 }
 
+// 修改启用禁用
+export function doctorUpdateEnabled(data): any {
+  return request.post('/api/doctorInfo/updateEnabled', data);
+}
+
 /**
  * 床位管理
  */
@@ -294,6 +299,11 @@ export function roleInfoDelete(data): any {
   });
 }
 
+// 设置角色权限
+export function setPermission(data): any {
+  return request.post('/api/roleInfo/setPermission', data);
+}
+
 /**
  * 权限管理
  */
@@ -335,6 +345,11 @@ export function permissionInfoDelete(data): any {
   });
 }
 
+// 修改启用禁用
+export function permissionUpdateEnabled(data): any {
+  return request.post('/api/permissionInfo/updateEnabled', data);
+}
+
 /**
  * 用户管理
  */
@@ -347,6 +362,8 @@ export function userInfo(data): any {
 
 // 用户详情
 export function userGetById(data): any {
+  console.log(data);
+
   return request.get('/api/user/getById', {
     params: data,
   });

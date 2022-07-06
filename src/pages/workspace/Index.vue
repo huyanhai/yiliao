@@ -50,15 +50,25 @@
         </a-form-item>
       </a-form>
     </a-card>
-    <my-table :data-source="list" :pagination="pagination" :loading="loading" @change="onPageChange">
+    <my-table
+      :data-source="list"
+      :pagination="pagination"
+      :loading="loading"
+      :scroll="{ x: 1500 }"
+      @change="onPageChange"
+    >
       <template #left>工作站管理</template>
       <template #right>
         <a-button type="primary" @click="showDialog = true">新增</a-button>
       </template>
       <a-table-column title="医院名称" data-index="name" />
       <a-table-column title="医院头像" data-index="logoFileId" />
-      <a-table-column title="上级医院" data-index="parentId" />
-      <a-table-column title="医院地址" data-index="address" />
+      <a-table-column title="上级医院" data-index="parentName" />
+      <a-table-column title="医院地址">
+        <template #default="{ record }">
+          {{ record.provinceName }}{{ record.cityName }}{{ record.districtName }}{{ record.address }}
+        </template>
+      </a-table-column>
       <a-table-column title="医院类型" data-index="hospitalType">
         <template #default="{ record }">
           {{ tsystemType[record.hospitalType] }}
@@ -69,8 +79,8 @@
           {{ thospitalLevel[record.hospitalLevel] }}
         </template>
       </a-table-column>
-      <a-table-column title="是否上架" data-index="lastName" />
-      <a-table-column title="操作">
+      <!-- <a-table-column title="是否上架" data-index="lastName" /> -->
+      <a-table-column title="操作" fixed="right" width="250px">
         <template #default="{ record }">
           <a-space>
             <a-button type="link" size="small" @click="checkDetails(record)">查看详情</a-button>

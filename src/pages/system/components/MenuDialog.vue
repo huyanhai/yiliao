@@ -1,12 +1,25 @@
 <template>
   <a-modal v-model:visible="showDialog" title="菜单管理" width="600px" :closable="false">
     <a-form ref="formRef" :model="item" :label-col="{ span: 4 }" :rules="rules">
+      <a-form-item label="系统类型" name="systemType">
+        <a-select
+          v-model:value="item.systemType"
+          :field-names="{
+            label: 'codeName',
+            value: 'codeValue',
+            options: 'options',
+          }"
+          :options="systemType"
+          @change="systemTypeChange"
+        />
+      </a-form-item>
       <a-form-item label="上级菜单">
         <a-tree-select
           v-model:value="item.parentId"
           style="width: 100%"
           :tree-data="allPermission"
           allow-clear
+          :disabled="!item.systemType"
           checkable
           :field-names="{
             label: 'name',
@@ -17,27 +30,20 @@
       <a-form-item label="系统名称" name="name">
         <a-input v-model:value="item.name" />
       </a-form-item>
-      <a-form-item label="系统类型" name="systemType">
-        <a-select
-          v-model:value="item.systemType"
-          :field-names="{
-            label: 'codeName',
-            value: 'codeValue',
-            options: 'options',
-          }"
-          :options="systemType"
-        />
-      </a-form-item>
+
       <a-form-item label="菜单类型" name="permissionType">
         <a-radio-group v-model:value="item.permissionType">
-          <a-radio value="1">目录</a-radio>
-          <a-radio value="2" :disabled="!item.parentId">页面</a-radio>
-          <a-radio value="3" :disabled="!item.parentId">按纽</a-radio>
+          <a-radio value="1" :disabled="!!item.parentId">系统</a-radio>
+          <a-radio value="2" :disabled="activeItem?.permissionType !== 1">目录</a-radio>
+          <a-radio value="3" :disabled="activeItem?.permissionType !== 1 && activeItem?.permissionType !== 2">
+            页面
+          </a-radio>
+          <a-radio value="4" :disabled="activeItem?.permissionType !== 3">按纽</a-radio>
         </a-radio-group>
       </a-form-item>
-      <a-form-item label="权限标识">
+      <!-- <a-form-item label="权限标识">
         <a-input />
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="请求地址" name="route">
         <a-input v-model:value="item.route" />
       </a-form-item>
@@ -46,8 +52,8 @@
       </a-form-item>
       <a-form-item label="菜单状态">
         <a-radio-group v-model:value="item.enabled">
-          <a-radio value="1">启用</a-radio>
-          <a-radio value="2">禁用</a-radio>
+          <a-radio :value="1">启用</a-radio>
+          <a-radio :value="2">禁用</a-radio>
         </a-radio-group>
       </a-form-item>
     </a-form>
@@ -68,7 +74,7 @@
 </template>
 <script lang="ts" setup>
 import type { FormInstance } from 'ant-design-vue';
-
+import { message as msg } from 'ant-design-vue';
 import { ref, computed } from 'vue';
 import { useMenu } from '../hooks/useMenu';
 import { permissionInfoInsert, permissionInfoUpdate } from '@/api';
@@ -80,6 +86,8 @@ const formRef = ref<FormInstance>();
 const loading = ref(false);
 const dictStore = useDictStore();
 
+const activeItem = ref();
+
 const dict = computed(() => dictStore.dict);
 const systemType = computed(() => dict.value.filter((item) => item.code === 'system_type'));
 
@@ -90,6 +98,10 @@ const rules = {
   permissionType: [{ required: true, message: '请选择菜单类型' }],
   route: [{ required: true, message: '请输入请求地址' }],
   sort: [{ required: true, message: '请输入显示顺序' }],
+};
+
+const systemTypeChange = (e) => {
+  console.log(e);
 };
 
 const confirm = async () => {
@@ -105,7 +117,7 @@ const confirm = async () => {
       getList();
       showDialog.value = false;
     } else {
-      message.success(message);
+      msg.error(message);
     }
   } catch (error) {
     console.log(error);
